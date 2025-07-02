@@ -102,6 +102,8 @@ function canSplit(hand) {
 function renderHands() {
     playerCardsDiv.innerHTML = '';
     playerScoreSpan.innerHTML = '';
+    document.getElementById('player-bets').innerHTML = ''; // Limpiar apuestas
+
     if (playerHands.length === 1) {
         let handDiv = document.createElement('div');
         handDiv.className = "player-hand";
@@ -114,7 +116,15 @@ function renderHands() {
         });
         playerCardsDiv.appendChild(handDiv);
         playerScoreSpan.textContent = handValue(playerHands[0]);
+
+        // Mostrar apuesta debajo (una sola)
+        let betLabel = document.createElement('span');
+        betLabel.className = "player-bet-label";
+        betLabel.textContent = `Apuesta: ${playerBets[0]} €`;
+        document.getElementById('player-bets').appendChild(betLabel);
+
     } else {
+        // SPLIT: mostrar ambas manos y sus apuestas
         playerHands.forEach((hand, i) => {
             let handDiv = document.createElement('div');
             handDiv.className = "player-hand";
@@ -142,6 +152,12 @@ function renderHands() {
             handDiv.prepend(label);
 
             playerCardsDiv.appendChild(handDiv);
+
+            // Mostrar apuesta de cada mano debajo
+            let betLabel = document.createElement('span');
+            betLabel.className = "player-bet-label";
+            betLabel.textContent = `Apuesta: ${playerBets[i]} €`;
+            document.getElementById('player-bets').appendChild(betLabel);
         });
     }
 }
@@ -175,6 +191,7 @@ function resetBoard() {
     standBtn.disabled = true;
     splitBtn.disabled = true;
     splitBtn.style.display = 'none';
+    document.getElementById('player-bets').innerHTML = '';
 }
 
 function startRound(bet) {
@@ -250,17 +267,17 @@ function endRound(result, blackjack = false, splitResults = null) {
             if (r === 'blackjack') {
                 winnings = playerBets[i] + Math.floor(playerBets[i] * 1.5);
                 playerMoney += winnings;
-                msg += `Mano ${i+1}: ¡Blackjack! +${winnings}€<br>`;
+                msg += `Mano ${i+1}: ¡Blackjack! +${winnings - playerBets[i]}€<br>`;
             } else if (r === 'win') {
                 winnings = playerBets[i] * 2;
                 playerMoney += winnings;
-                msg += `Mano ${i+1}: ¡Ganaste! +${winnings}€<br>`;
+                msg += `Mano ${i+1}: ¡Ganaste! +${playerBets[i]}€<br>`;
             } else if (r === 'push') {
                 winnings = playerBets[i];
                 playerMoney += winnings;
-                msg += `Mano ${i+1}: Empate (push). +${winnings}€<br>`;
+                msg += `Mano ${i+1}: Empate (push). +0€<br>`;
             } else {
-                msg += `Mano ${i+1}: Perdiste.<br>`;
+                msg += `Mano ${i+1}: Perdiste. -${playerBets[i]}€<br>`;
             }
         });
         updateMoney();
@@ -272,22 +289,22 @@ function endRound(result, blackjack = false, splitResults = null) {
             winnings = currentBet + Math.floor(currentBet * 1.5);
             playerMoney += winnings;
             updateMoney();
-            msg = `¡Blackjack! Pagas 3:2. Has ganado ${winnings} €`;
+            msg = `¡Blackjack! Pagas 3:2. Has ganado +${winnings - currentBet} €`;
         }
         else if (result === 'win') {
             winnings = currentBet * 2;
             playerMoney += winnings;
             updateMoney();
-            msg = '¡Has ganado!';
+            msg = `¡Has ganado! +${currentBet} €`;
         }
         else if (result === 'lose') {
-            msg = 'Has perdido la mano.';
+            msg = `Has perdido la mano. -${currentBet} €`;
         }
         else if (result === 'push') {
             winnings = currentBet;
             playerMoney += winnings;
             updateMoney();
-            msg = 'Empate: recuperas tu apuesta.';
+            msg = 'Empate: recuperas tu apuesta. +0 €';
         }
         messageDiv.textContent = msg;
     }
