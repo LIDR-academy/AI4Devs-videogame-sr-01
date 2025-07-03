@@ -136,6 +136,5 @@ teniendo en cuenta el juego realizado en el fichero @index.html necesito que lo 
 
 ## Resultado 5
 
-## Prompt n
-
-## Resultado n
+Me hizo el juego pero por ejemplo la puntuación no la guarda para la siguiente partida y ver cual jugador fue mejor o cual fue la mejor puntuación.
+Lo pedí responsive pero en ciertos puntos no me ajustaba el board para que se vieran las celdas juntas siempre...
