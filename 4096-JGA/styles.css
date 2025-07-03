@@ -1,0 +1,305 @@
+* {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .game-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        backdrop-filter: blur(10px);
+      }
+
+      h1 {
+        color: #2c3e50;
+        font-size: 3rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .subtitle {
+        color: #7f8c8d;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      .game-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .score-container {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
+
+      .score-box {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 15px;
+        text-align: center;
+        min-width: 120px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .score-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-bottom: 5px;
+      }
+
+      .score-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .controls {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .game-board {
+        background: #34495e;
+        border-radius: 15px;
+        padding: 15px;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        margin-bottom: 30px;
+        box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .tile {
+        width: 70px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .tile.tile-2 {
+        background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+        color: #2c3e50;
+      }
+      .tile.tile-4 {
+        background: linear-gradient(135deg, #f39c12, #d35400);
+        color: white;
+      }
+      .tile.tile-8 {
+        background: linear-gradient(135deg, #e67e22, #d35400);
+        color: white;
+      }
+      .tile.tile-16 {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+      }
+      .tile.tile-32 {
+        background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        color: white;
+      }
+      .tile.tile-64 {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+      }
+      .tile.tile-128 {
+        background: linear-gradient(135deg, #1abc9c, #16a085);
+        color: white;
+        font-size: 1rem;
+      }
+      .tile.tile-256 {
+        background: linear-gradient(135deg, #f1c40f, #f39c12);
+        color: white;
+        font-size: 1rem;
+      }
+      .tile.tile-512 {
+        background: linear-gradient(135deg, #e67e22, #d35400);
+        color: white;
+        font-size: 1rem;
+      }
+      .tile.tile-1024 {
+        background: linear-gradient(135deg, #c0392b, #a93226);
+        color: white;
+        font-size: 0.9rem;
+      }
+      .tile.tile-2048 {
+        background: linear-gradient(135deg, #8e44ad, #7d3c98);
+        color: white;
+        font-size: 0.9rem;
+      }
+      .tile.tile-4096 {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: #f1c40f;
+        font-size: 0.9rem;
+        border: 2px solid #f1c40f;
+        animation: glow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes glow {
+        from {
+          box-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
+        }
+        to {
+          box-shadow: 0 0 30px rgba(241, 196, 15, 0.8);
+        }
+      }
+
+      .tile-new {
+        animation: tile-appear 0.3s ease-out;
+      }
+
+      @keyframes tile-appear {
+        from {
+          transform: scale(0);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .tile-merged {
+        animation: tile-merge 0.3s ease-out;
+      }
+
+      @keyframes tile-merge {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .instructions {
+        color: #7f8c8d;
+        font-size: 1rem;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .game-message {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .game-message.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .message-content {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+      }
+
+      .message-title {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: #2c3e50;
+      }
+
+      .message-text {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+        margin-bottom: 30px;
+        line-height: 1.5;
+      }
+
+      .win-message .message-title {
+        color: #27ae60;
+      }
+
+      .lose-message .message-title {
+        color: #e74c3c;
+      }
+
+      @media (max-width: 768px) {
+        .game-container {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        .tile {
+          width: 60px;
+          height: 60px;
+          font-size: 1rem;
+        }
+
+        .game-info {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .score-container {
+          justify-content: center;
+        }
+      }
