@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>TetrisMine</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Arcade pixel font -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/mine.png">
+</head>
+
+<body>
+  <div id="welcomeScreen">
+    <img id="welcomeLogo" src="assets/logo_tetrismine.png" alt="TetrisMine logo">
+    <input  id="playerName" type="text" maxlength="12" placeholder="YOUR NAME">
+    <button id="startBtn" disabled>START GAME</button>
+
+    <h3>TOP 10</h3>
+    <ol id="leaderboard"></ol>
+  </div>
+
+  <div id="gameUI">
+
+    <!-- TetrisMine logo -->
+    <img id="logo"
+         src="assets/logo_tetrismine.png"
+         alt="TetrisMine logo">
+
+    <div id="gameContainer">
+      <canvas id="gameCanvas" width="360" height="720"></canvas>
+
+      <div id="sidePanel">
+        <p id="nextLabel"></p>
+        <canvas id="nextCanvas" width="60" height="60"></canvas>
+
+        <p><span id="topLabel"></span><span id="topScore">0</span></p>
+        <p><span id="scoreLabel"></span><span id="score">100</span></p>
+        <button id="discardBtn"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="board.js"></script>
+  <script src="validation.js"></script>
+  <script src="render.js"></script>
+  <script src="messages.js"></script>
+  <script src="modal.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
