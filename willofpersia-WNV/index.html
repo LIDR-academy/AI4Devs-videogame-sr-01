@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Will of Persia - 2D Platformer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="1024" height="576"></canvas>
+        
+        <!-- Game UI -->
+        <div id="gameUI">
+            <div id="score">Keys: 0/3</div>
+            <div id="level">Level: 1</div>
+            <div id="audioControls">
+                <button id="muteBtn" class="audio-btn">🔊</button>
+                <span class="audio-label">Press M to mute</span>
+            </div>
+        </div>
+
+        <!-- Mobile Touch Controls -->
+        <div id="mobileControls" class="mobile-controls">
+            <div class="mobile-left">
+                <button id="leftBtn" class="mobile-btn direction-btn">←</button>
+                <button id="rightBtn" class="mobile-btn direction-btn">→</button>
+            </div>
+            <div class="mobile-right">
+                <button id="jumpBtn" class="mobile-btn jump-btn">JUMP</button>
+                <button id="actionBtn" class="mobile-btn action-btn">ACTION</button>
+            </div>
+        </div>
+        
+        <!-- Start Screen -->
+        <div id="startScreen" class="screen">
+            <h1>Will of Persia</h1>
+            <p>A 2D Platformer Adventure</p>
+            <p id="controlsText">Use ARROW KEYS to move and SPACE to jump</p>
+            <p>Collect all keys and reach the exit portal!</p>
+            <button id="startButton">Start Game</button>
+        </div>
+        
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="screen hidden">
+            <h1>Game Over</h1>
+            <p id="gameOverMessage">Better luck next time!</p>
+            <button id="restartButton">Try Again</button>
+        </div>
+        
+        <!-- Level Complete Screen -->
+        <div id="levelCompleteScreen" class="screen hidden">
+            <h1>Level Complete!</h1>
+            <p>Excellent work, brave adventurer!</p>
+            <button id="nextLevelButton">Next Level</button>
+        </div>
+        
+        <!-- Game Complete Screen -->
+        <div id="gameCompleteScreen" class="screen hidden">
+            <h1>🎉 Victory! 🎉</h1>
+            <p>You've mastered all levels!</p>
+            <p>Thanks for playing Will of Persia!</p>
+            <button id="playAgainButton">Play Again</button>
+        </div>
+    </div>
+    
+    <!-- Game Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/physics.js"></script>
+    <script src="js/gameObjects.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/level.js"></script>
+    <script src="js/game.js"></script>
+    
+    <script>
+        // Check if device is mobile
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Initialize the game when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('🎮 DOM loaded, initializing game...');
+            
+            // Show appropriate controls text
+            const controlsText = document.getElementById('controlsText');
+            if (isMobile) {
+                controlsText.textContent = 'Use TOUCH CONTROLS to move and jump';
+                // Show mobile controls
+                document.getElementById('mobileControls').style.display = 'flex';
+            } else {
+                // Hide mobile controls on desktop
+                document.getElementById('mobileControls').style.display = 'none';
+            }
+            
+            try {
+                const game = new Game('gameCanvas');
+                window.game = game; // Make it accessible for debugging
+                window.isMobile = isMobile; // Make mobile detection accessible
+                game.init();
+                
+                // Initialize mute button state
+                const muteBtn = document.getElementById("muteBtn");
+                if (muteBtn && window.audioManager) {
+                    muteBtn.textContent = window.audioManager.muted ? "🔇" : "🔊";
+                }
+                
+                console.log('✅ Game initialized successfully');
+                console.log('📱 Mobile device detected:', isMobile);
+            } catch (error) {
+                console.error('❌ Game initialization failed:', error);
+            }
+        });
+    </script>
+</body>
+</html> 
