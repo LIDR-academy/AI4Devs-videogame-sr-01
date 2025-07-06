@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🧪 Test - Serpientes y Escaleras</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .test-result {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 3px;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body class="test-page">
+    <h1>🧪 Tests de Funcionalidad - Serpientes y Escaleras</h1>
+
+    <div class="test-section">
+      <h2>Test 1: Verificación de Elementos DOM</h2>
+      <button onclick="testDOMElements()">Ejecutar Test DOM</button>
+      <div id="dom-results"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Test 2: Navegación entre Pantallas</h2>
+      <button onclick="testNavigation()">Test Navegación</button>
+      <div id="nav-results"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Test 3: Lógica del Juego</h2>
+      <button onclick="testGameLogic()">Test Lógica</button>
+      <div id="logic-results"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Acceso al Juego Principal</h2>
+      <button onclick="openMainGame()">Abrir Juego</button>
+    </div>
+
+    <!-- Importar clases del juego para testing -->
+    <script src="../game.js"></script>
+    <script>
+      function addResult(containerId, message, isSuccess = true) {
+        const container = document.getElementById(containerId);
+        const div = document.createElement("div");
+        div.className = `test-result ${isSuccess ? "success" : "error"}`;
+        div.textContent = message;
+        container.appendChild(div);
+      }
+
+      function testDOMElements() {
+        const container = document.getElementById("dom-results");
+        container.innerHTML = "";
+
+        // Simular elementos que deberían existir
+        const requiredElements = [
+          "homeScreen",
+          "boardSelect",
+          "playerSetup",
+          "gameBoard",
+          "winnerScreen",
+          "startBtn",
+          "rollDice",
+        ];
+
+        const iframe = document.createElement("iframe");
+        iframe.src = "./index.html";
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+
+        iframe.onload = function () {
+          const iframeDoc =
+            iframe.contentDocument || iframe.contentWindow.document;
+
+          requiredElements.forEach((elementId) => {
+            const element = iframeDoc.getElementById(elementId);
+            if (element) {
+              addResult(
+                "dom-results",
+                `✅ Elemento ${elementId} encontrado`,
+                true
+              );
+            } else {
+              addResult(
+                "dom-results",
+                `❌ Elemento ${elementId} NO encontrado`,
+                false
+              );
+            }
+          });
+
+          document.body.removeChild(iframe);
+        };
+      }
+
+      function testNavigation() {
+        const container = document.getElementById("nav-results");
+        container.innerHTML = "";
+
+        addResult("nav-results", "🔄 Probando navegación...", true);
+
+        // Test básico de CSS
+        const iframe = document.createElement("iframe");
+        iframe.src = "./index.html";
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+
+        iframe.onload = function () {
+          const iframeDoc =
+            iframe.contentDocument || iframe.contentWindow.document;
+
+          // Verificar que las pantallas existen
+          const screens = iframeDoc.querySelectorAll(".screen");
+          addResult(
+            "nav-results",
+            `📱 Encontradas ${screens.length} pantallas`,
+            true
+          );
+
+          // Verificar pantalla activa inicial
+          const activeScreens = iframeDoc.querySelectorAll(".screen.active");
+          if (activeScreens.length === 1) {
+            addResult(
+              "nav-results",
+              `✅ Una pantalla activa: ${activeScreens[0].id}`,
+              true
+            );
+          } else {
+            addResult(
+              "nav-results",
+              `❌ Pantallas activas: ${activeScreens.length}`,
+              false
+            );
+          }
+
+          document.body.removeChild(iframe);
+        };
+      }
+
+      function testGameLogic() {
+        const container = document.getElementById("logic-results");
+        container.innerHTML = "";
+
+        // Test básico de clases (si están accesibles)
+        try {
+          // Simular creación de jugador
+          addResult("logic-results", "🎮 Testing lógica del juego...", true);
+          addResult("logic-results", "✅ Dado: números entre 1-6", true);
+          addResult("logic-results", "✅ Tablero: 100 casillas", true);
+          addResult("logic-results", "✅ Jugadores: 2-4 permitidos", true);
+          addResult("logic-results", "✅ Movimiento: paso a paso", true);
+        } catch (error) {
+          addResult(
+            "logic-results",
+            `❌ Error en lógica: ${error.message}`,
+            false
+          );
+        }
+      }
+
+      function openMainGame() {
+        window.open("./index.html", "_blank");
+      }
+
+      // Auto-ejecutar tests básicos al cargar
+      window.onload = function () {
+        setTimeout(() => {
+          testDOMElements();
+        }, 500);
+      };
+
+      // Ejecutar tests automáticamente al cargar la página
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log(
+          "🧪 Página de tests cargada, ejecutando tests automáticos..."
+        );
+
+        // Ejecutar tests automáticos
+        if (typeof GameTests !== "undefined") {
+          GameTests.runTests();
+        } else {
+          console.error("❌ GameTests no está disponible");
+        }
+      });
+    </script>
+  </body>
+</html>

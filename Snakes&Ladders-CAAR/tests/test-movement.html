@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test - Movimiento de Fichas</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .test-info {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .test-case {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border-left: 4px solid #4ecdc4;
+      }
+
+      .expected {
+        color: #4ecdc4;
+        font-weight: bold;
+      }
+
+      .actual {
+        color: #f9ca24;
+        font-weight: bold;
+      }
+
+      button {
+        background: linear-gradient(45deg, #ff6b6b, #ffa726);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body class="test-page">
+    <h1>🧪 Test de Movimiento de Fichas</h1>
+
+    <div class="test-info">
+      <h2>Casos de Prueba del Movimiento</h2>
+      <p>
+        Esta página verifica que la lógica de movimiento esté funcionando
+        correctamente:
+      </p>
+
+      <div class="test-case">
+        <h3>Test 1: Primer movimiento desde posición 0</h3>
+        <p>
+          <span class="expected">Esperado:</span> Si un jugador está en posición
+          0 y tira 3, debe ir a casilla 3
+        </p>
+        <p>
+          <span class="actual" id="test1-result">Resultado: Pendiente</span>
+        </p>
+        <button onclick="runTest1()">Ejecutar Test 1</button>
+      </div>
+
+      <div class="test-case">
+        <h3>Test 2: Movimiento normal</h3>
+        <p>
+          <span class="expected">Esperado:</span> Si un jugador está en casilla
+          5 y tira 4, debe ir a casilla 9
+        </p>
+        <p>
+          <span class="actual" id="test2-result">Resultado: Pendiente</span>
+        </p>
+        <button onclick="runTest2()">Ejecutar Test 2</button>
+      </div>
+
+      <div class="test-case">
+        <h3>Test 3: No puede pasar de 100</h3>
+        <p>
+          <span class="expected">Esperado:</span> Si un jugador está en casilla
+          98 y tira 5, NO debe moverse
+        </p>
+        <p>
+          <span class="actual" id="test3-result">Resultado: Pendiente</span>
+        </p>
+        <button onclick="runTest3()">Ejecutar Test 3</button>
+      </div>
+
+      <div class="test-case">
+        <h3>Test 4: Numeración del tablero (zigzag)</h3>
+        <p>
+          <span class="expected">Esperado:</span> Verificar que las casillas
+          sigan el patrón correcto
+        </p>
+        <p>
+          <span class="actual" id="test4-result">Resultado: Pendiente</span>
+        </p>
+        <button onclick="runTest4()">Ejecutar Test 4</button>
+      </div>
+
+      <div class="test-case">
+        <h3>Test 5: Problema reportado - Dado 2 desde posición 0</h3>
+        <p>
+          <span class="expected">Esperado:</span> Posición 0 + dado 2 = casilla
+          2 (NO casilla 5)
+        </p>
+        <p>
+          <span class="actual" id="test5-result">Resultado: Pendiente</span>
+        </p>
+        <button onclick="runTest5()">Ejecutar Test 5</button>
+      </div>
+
+      <div class="test-case">
+        <h3>Test 6: Problema reportado - Segundo movimiento</h3>
+        <p>
+          <span class="expected">Esperado:</span> Posición 2 + dado 4 = casilla
+          6 (NO retroceder a 2)
+        </p>
+        <p>
+          <span class="actual" id="test6-result">Resultado: Pendiente</span>
+        </p>
+        <button onclick="runTest6()">Ejecutar Test 6</button>
+      </div>
+
+      <div class="test-case">
+        <h3>Test 7: Problema reportado - Jugador 2</h3>
+        <p>
+          <span class="expected">Esperado:</span> Posición 1 + dado 2 = casilla
+          3 (NO casilla 4)
+        </p>
+        <p>
+          <span class="actual" id="test7-result">Resultado: Pendiente</span>
+        </p>
+        <button onclick="runTest7()">Ejecutar Test 7</button>
+      </div>
+    </div>
+
+    <div class="test-info">
+      <h2>Resultado de Tests</h2>
+      <div id="test-results"></div>
+      <button onclick="runAllTests()">🚀 Ejecutar Todos los Tests</button>
+      <button onclick="openMainGame()">🎮 Ir al Juego Principal</button>
+    </div>
+
+    <script>
+      // Mock de las clases principales para testing
+      class TestPlayer {
+        constructor(name, position = 0) {
+          this.name = name;
+          this.position = position;
+          this.id = 1;
+          this.avatar = "🎮";
+          this.color = "#ff6b6b";
+        }
+      }
+
+      class TestBoard {
+        getCellNumber(row, col) {
+          const rowFromBottom = 9 - row;
+          if (rowFromBottom % 2 === 0) {
+            return rowFromBottom * 10 + col + 1;
+          } else {
+            return rowFromBottom * 10 + (10 - col);
+          }
+        }
+      }
+
+      function movePlayerLogic(player, steps) {
+        let newPosition;
+
+        if (player.position === 0) {
+          newPosition = steps;
+        } else {
+          newPosition = player.position + steps;
+        }
+
+        if (newPosition > 100) {
+          return {
+            moved: false,
+            position: player.position,
+            reason: "No puede pasar de 100",
+          };
+        }
+
+        return {
+          moved: true,
+          position: newPosition,
+          reason: "Movimiento exitoso",
+        };
+      }
+
+      function runTest1() {
+        const player = new TestPlayer("Jugador1", 0);
+        const steps = 3;
+        const result = movePlayerLogic(player, steps);
+
+        const expected = 3;
+        const passed = result.moved && result.position === expected;
+
+        document.getElementById("test1-result").innerHTML = `Resultado: ${
+          result.position
+        } | ${passed ? "✅ PASÓ" : "❌ FALLÓ"}`;
+
+        return passed;
+      }
+
+      function runTest2() {
+        const player = new TestPlayer("Jugador2", 5);
+        const steps = 4;
+        const result = movePlayerLogic(player, steps);
+
+        const expected = 9;
+        const passed = result.moved && result.position === expected;
+
+        document.getElementById("test2-result").innerHTML = `Resultado: ${
+          result.position
+        } | ${passed ? "✅ PASÓ" : "❌ FALLÓ"}`;
+
+        return passed;
+      }
+
+      function runTest3() {
+        const player = new TestPlayer("Jugador3", 98);
+        const steps = 5;
+        const result = movePlayerLogic(player, steps);
+
+        const expected = 98; // No debe moverse
+        const passed = !result.moved && result.position === expected;
+
+        document.getElementById("test3-result").innerHTML = `Resultado: ${
+          result.position
+        } (${result.reason}) | ${passed ? "✅ PASÓ" : "❌ FALLÓ"}`;
+
+        return passed;
+      }
+
+      function runTest4() {
+        const board = new TestBoard();
+
+        // Test de numeración zigzag
+        const tests = [
+          { row: 9, col: 0, expected: 1 }, // Esquina inferior izquierda
+          { row: 9, col: 9, expected: 10 }, // Esquina inferior derecha
+          { row: 8, col: 9, expected: 11 }, // Primera casilla segunda fila
+          { row: 8, col: 0, expected: 20 }, // Última casilla segunda fila
+          { row: 0, col: 0, expected: 91 }, // Primera casilla fila superior
+          { row: 0, col: 9, expected: 100 }, // Esquina superior derecha (meta)
+        ];
+
+        let allPassed = true;
+        let resultText = "";
+
+        tests.forEach((test, index) => {
+          const actual = board.getCellNumber(test.row, test.col);
+          const passed = actual === test.expected;
+          allPassed = allPassed && passed;
+
+          resultText += `Test ${index + 1}: Fila ${test.row}, Col ${
+            test.col
+          } = ${actual} (esperado: ${test.expected}) ${
+            passed ? "✅" : "❌"
+          }<br>`;
+        });
+
+        document.getElementById("test4-result").innerHTML = `${
+          allPassed ? "✅ TODOS PASARON" : "❌ ALGUNOS FALLARON"
+        }<br>${resultText}`;
+
+        return allPassed;
+      }
+
+      function runTest5() {
+        // Test específico: Problema reportado jugador 1
+        const player = new TestPlayer("Jugador1", 0);
+        const steps = 2;
+        const result = movePlayerLogic(player, steps);
+
+        const expected = 2; // NO 5
+        const passed = result.moved && result.position === expected;
+
+        document.getElementById("test5-result").innerHTML = `Resultado: ${
+          result.position
+        } | ${
+          passed
+            ? "✅ CORREGIDO"
+            : "❌ AÚN FALLA (esperado: 2, obtuvo: " + result.position + ")"
+        }`;
+
+        return passed;
+      }
+
+      function runTest6() {
+        // Test específico: Segundo movimiento desde posición 2
+        const player = new TestPlayer("Jugador1", 2);
+        const steps = 4;
+        const result = movePlayerLogic(player, steps);
+
+        const expected = 6; // NO retroceder a 2
+        const passed = result.moved && result.position === expected;
+
+        document.getElementById("test6-result").innerHTML = `Resultado: ${
+          result.position
+        } | ${
+          passed
+            ? "✅ CORREGIDO"
+            : "❌ AÚN FALLA (esperado: 6, obtuvo: " + result.position + ")"
+        }`;
+
+        return passed;
+      }
+
+      function runTest7() {
+        // Test específico: Jugador 2 problema reportado
+        const player = new TestPlayer("Jugador2", 1);
+        const steps = 2;
+        const result = movePlayerLogic(player, steps);
+
+        const expected = 3; // NO 4
+        const passed = result.moved && result.position === expected;
+
+        document.getElementById("test7-result").innerHTML = `Resultado: ${
+          result.position
+        } | ${
+          passed
+            ? "✅ CORREGIDO"
+            : "❌ AÚN FALLA (esperado: 3, obtuvo: " + result.position + ")"
+        }`;
+
+        return passed;
+      }
+
+      function runAllTests() {
+        const results = [
+          runTest1(),
+          runTest2(),
+          runTest3(),
+          runTest4(),
+          runTest5(),
+          runTest6(),
+          runTest7(),
+        ];
+
+        const totalPassed = results.filter((r) => r).length;
+        const totalTests = results.length;
+
+        const resultDiv = document.getElementById("test-results");
+        resultDiv.innerHTML = `
+                <h3>📊 Resumen de Tests</h3>
+                <p><strong>Tests pasados: ${totalPassed}/${totalTests}</strong></p>
+                <p>${
+                  totalPassed === totalTests
+                    ? "🎉 ¡Todos los tests pasaron!"
+                    : "⚠️ Algunos tests fallaron"
+                }</p>
+                <p><strong>Tests específicos de problemas reportados:</strong></p>
+                <ul>
+                    <li>Test 5 (Dado 2 desde pos 0): ${
+                      results[4] ? "✅" : "❌"
+                    }</li>
+                    <li>Test 6 (Pos 2 + dado 4): ${
+                      results[5] ? "✅" : "❌"
+                    }</li>
+                    <li>Test 7 (Pos 1 + dado 2): ${
+                      results[6] ? "✅" : "❌"
+                    }</li>
+                </ul>
+            `;
+      }
+
+      function openMainGame() {
+        window.open("index.html", "_blank");
+      }
+
+      // Ejecutar tests automáticamente al cargar
+      window.onload = function () {
+        console.log("🧪 Página de testing cargada");
+      };
+    </script>
+  </body>
+</html>

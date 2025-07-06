@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Board Numbering</title>
+  </head>
+  <body class="test-page">
+    <h1>Test de Numeración del Tablero</h1>
+    <div id="results"></div>
+
+    <script>
+      function getCellNumber(row, col) {
+        const rowFromBottom = 9 - row;
+        const baseNumber = rowFromBottom * 10;
+
+        if (rowFromBottom % 2 === 0) {
+          return baseNumber + col + 1;
+        } else {
+          return baseNumber + 10 - col;
+        }
+      }
+
+      function runTests() {
+        const tests = [
+          { row: 0, col: 0, expected: 91, name: "Top-left" },
+          { row: 0, col: 9, expected: 100, name: "Top-right" },
+          { row: 9, col: 0, expected: 1, name: "Bottom-left" },
+          { row: 9, col: 9, expected: 10, name: "Bottom-right" },
+          { row: 8, col: 0, expected: 11, name: "Row 8, Col 0" },
+          { row: 8, col: 9, expected: 20, name: "Row 8, Col 9" },
+          { row: 7, col: 0, expected: 30, name: "Row 7, Col 0" },
+          { row: 7, col: 9, expected: 21, name: "Row 7, Col 9" },
+        ];
+
+        let results = "<h2>Resultados:</h2>";
+        let allPassed = true;
+
+        tests.forEach((test) => {
+          const actual = getCellNumber(test.row, test.col);
+          const passed = actual === test.expected;
+          allPassed = allPassed && passed;
+
+          results += `<p>${passed ? "✅" : "❌"} ${test.name}: Esperado ${
+            test.expected
+          }, Obtenido ${actual}</p>`;
+        });
+
+        results += `<h3>${
+          allPassed ? "🎉 TODOS LOS TESTS PASARON" : "⚠️ ALGUNOS TESTS FALLARON"
+        }</h3>`;
+        document.getElementById("results").innerHTML = results;
+      }
+
+      runTests();
+    </script>
+  </body>
+</html>
