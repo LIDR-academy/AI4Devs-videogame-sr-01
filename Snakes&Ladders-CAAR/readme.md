@@ -4,6 +4,10 @@
 
 Juego completo de **Serpientes y Escaleras** desarrollado con HTML, CSS y JavaScript puro. Incluye múltiples temas visuales, sonidos, animaciones y soporte para 2-4 jugadores.
 
+<div align="center">
+  <img src="GameImages/1.Snake&Ladders.png" width="400" alt="Serpientes y Escaleras">
+</div>
+
 ## 🎮 Características
 
 - **3 Temas Visuales:**
@@ -12,6 +16,14 @@ Juego completo de **Serpientes y Escaleras** desarrollado con HTML, CSS y JavaSc
   - Futurista: Tema oscuro con efectos neón
   - Tradicional: Diseño clásico con colores madera
 
+### Capturas de los Temas
+
+<div align="center">
+  <img src="GameImages/4.Snake&Ladders.png" width="250" alt="Tema KWAI">
+  <img src="GameImages/6.Snake&Ladders.png" width="250" alt="Tema Futurista">
+  <img src="GameImages/8.Snake&Ladders.png" width="250" alt="Tema Tradicional">
+</div>
+
 - **Multijugador:** 2-4 jugadores con nombres personalizables
 - **Sonidos:** Efectos de audio para cada acción del juego
 - **Animaciones:** Movimientos suaves de fichas y efectos visuales
@@ -19,12 +31,30 @@ Juego completo de **Serpientes y Escaleras** desarrollado con HTML, CSS y JavaSc
 
 ## 🚀 Cómo Jugar
 
+![Flujo del Juego](GameImages/FlujoDelJuego.gif)
+
 1. Selecciona un tema visual
 2. Configura los jugadores (2-4)
 3. Cada jugador lanza el dado por turnos
 4. Mueve tu ficha según el resultado del dado
 5. Las escaleras te suben, las serpientes te bajan
 6. ¡El primero en llegar al casillero 100 gana!
+
+## 📸 Capturas de Pantalla
+
+<div align="center">
+  <img src="GameImages/3.Snake&Ladders.png" width="45%" alt="Configuración del juego">
+  <img src="GameImages/4.Snake&Ladders.png" width="45%" alt="Juego en progreso">
+</div>
+<div align="center">
+  <img src="GameImages/5.Snake&Ladders.png" width="45%" alt="Configuración del juego">
+  <img src="GameImages/6.Snake&Ladders.png" width="45%" alt="Juego en progreso">
+</div>
+
+<div align="center">
+  <img src="GameImages/7.Snake&Ladders.png" width="45%" alt="Efectos especiales">
+  <img src="GameImages/8.Snake&Ladders.png" width="45%" alt="Victoria del juego">
+</div>
 
 ## 🛠 Tecnologías
 
