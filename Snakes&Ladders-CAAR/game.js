@@ -550,9 +550,18 @@ class Game {
 
     this.currentPlayerIndex = 0;
 
-    // ✅ NO regenerar tablero - usar el mismo para evitar inconsistencias
-    // this.board.generate(); // ❌ REMOVIDO
-    // this.board.render();   // ❌ REMOVIDO
+    // ✅ Reiniciar estados de juego
+    this.isAnimating = false;
+    this.isGameActive = true;
+
+    // ✅ Habilitar el botón del dado
+    const diceBtn = document.getElementById("rollDice");
+    if (diceBtn) {
+      diceBtn.disabled = false;
+      console.log(
+        `✅ Botón de dado habilitado para reinicio [Juego: ${this.gameId}]`
+      );
+    }
 
     // Solo reposicionar fichas
     this.players.forEach((player) => {
@@ -562,7 +571,6 @@ class Game {
     this.uiManager.showScreen("gameBoard");
     this.uiManager.updatePlayersPanel(this.players);
     this.uiManager.updateCurrentPlayer(this.players[this.currentPlayerIndex]);
-    this.isGameActive = true;
 
     console.log(
       `✅ Juego reiniciado con tablero existente [Board: ${this.board.boardId}]`
