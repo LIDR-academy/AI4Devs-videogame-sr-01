@@ -164,27 +164,32 @@ class GameScene extends Phaser.Scene {
     }
 
     ballHitPaddle(ball, paddle) {
-        // Asegurar que la bola esté por encima del paddle
-        if (ball.y >= paddle.y - paddle.height/2) {
-            ball.y = paddle.y - paddle.height/2 - ball.height/2;
+        // Garantizar que la bola se coloque justo encima de la paleta
+        if (ball.y >= paddle.y - paddle.displayHeight / 2) {
+            ball.y = paddle.y - paddle.displayHeight / 2 - ball.displayHeight / 2;
         }
-        
-        // Calcular ángulo de rebote basado en dónde golpeó la bola
-        const hitPoint = (ball.x - paddle.x) / (paddle.width / 2);
-        const angle = hitPoint * Math.PI / 3; // -60° a +60°
-        
+
+        // Determinar la posición relativa del impacto
+        const halfWidth = paddle.displayWidth / 2;
+        const offset = Phaser.Math.Clamp(ball.x - paddle.x, -halfWidth, halfWidth);
+        const hitRatio = Math.abs(offset) / halfWidth; // 0 (centro) a 1 (bordes)
+
         const velocity = ball.getData('speed');
-        
-        // Asegurar velocidad mínima hacia arriba
-        let newVelocityY = -velocity * Math.cos(angle);
-        if (newVelocityY > -100) {
-            newVelocityY = -100; // Velocidad mínima hacia arriba
+
+        // Calcular el ángulo de salida con un máximo de ±60°
+        const baseAngle = Phaser.Math.DegToRad(60);
+        const angle = hitRatio * baseAngle;
+        const dir = offset >= 0 ? 1 : -1; // derecha o izquierda
+
+        let velX = dir * velocity * Math.sin(angle);
+        let velY = -Math.abs(velocity * Math.cos(angle));
+
+        // Garantizar una velocidad mínima hacia arriba
+        if (velY > -100) {
+            velY = -100;
         }
-        
-        ball.setVelocity(
-            velocity * Math.sin(angle),
-            newVelocityY
-        );
+
+        ball.setVelocity(velX, velY);
         
         // Reproducir sonido
         this.sound.play('paddle_hit');
