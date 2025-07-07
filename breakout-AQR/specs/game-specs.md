@@ -23,6 +23,20 @@ La experiencia es **responsive y optimizada para pantallas táctiles** (arrastre
 
 ---
 
+## 🎮 Controles del Juego
+
+### Desktop (Teclado y Mouse)
+- **Barra espaciadora**: Lanzar la bola
+- **Flechas izquierda/derecha**: Mover el paddle
+- **Mouse**: Mover el paddle y hacer clic para lanzar la bola
+
+### Móvil (Touch)
+- **Toque en pantalla**: Lanzar la bola
+- **Deslizar el dedo**: Mover el paddle
+- **Controles intuitivos**: Optimizados para pantallas táctiles
+
+---
+
 ## 🧪 Tecnología y Herramientas
 - **Phaser 3** (motor principal de juego)
 - **HTML5**

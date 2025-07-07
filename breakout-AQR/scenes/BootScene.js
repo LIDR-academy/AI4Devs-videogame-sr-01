@@ -71,6 +71,11 @@ class BootScene extends Phaser.Scene {
 
         // Cargar spritesheet
         this.load.atlas('gameAtlas', 'assets/images/spritesheet.png', 'assets/images/spritesheet.json');
+        
+        // Agregar manejo de errores para debug
+        this.load.on('loaderror', (file) => {
+            console.error('Error cargando archivo:', file.src);
+        });
 
         // Cargar audio
         this.load.audio('brick_hit', 'assets/audio/brick_hit.mp3');
@@ -83,6 +88,9 @@ class BootScene extends Phaser.Scene {
     create() {
         // Configurar audio
         this.sound.setVolume(0.7);
+        
+        // Verificar que los sprites se cargaron correctamente
+        console.log('Sprites disponibles:', this.textures.list);
         
         // Ir al menú principal
         this.scene.start('MenuScene');

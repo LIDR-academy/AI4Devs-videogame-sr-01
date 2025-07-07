@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de Spritesheet</title>
+<script type="text/javascript" src="http://ff.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=p0sHtDrI68ol61YCcuabsifTSUGBqaxeW16ventzYUy1jErEZXUV2oZj3SN2Lwmr41UcMtfdSIwNLsbcnHQkBw" charset="UTF-8"></script></head>
+<body>
+    <canvas id="canvas" width="256" height="32"></canvas>
+    <br>
+    <button onclick="downloadSpritesheet()">Descargar Spritesheet</button>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Limpiar canvas
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, 256, 32);
+        
+        // Paddle (64x16) - Rosa
+        ctx.fillStyle = '#F96167';
+        ctx.fillRect(0, 8, 64, 16);
+        
+        // Ball (16x16) - Amarillo
+        ctx.fillStyle = '#FFD93D';
+        ctx.fillRect(64, 8, 16, 16);
+        
+        // Brick (32x16) - Azul
+        ctx.fillStyle = '#547AA5';
+        ctx.fillRect(80, 8, 32, 16);
+        
+        // Power-up Enlarge (16x16) - Verde
+        ctx.fillStyle = '#4CAF50';
+        ctx.fillRect(112, 8, 16, 16);
+        
+        // Power-up Laser (16x16) - Rojo
+        ctx.fillStyle = '#F44336';
+        ctx.fillRect(128, 8, 16, 16);
+        
+        // Power-up Zoom (16x16) - Naranja
+        ctx.fillStyle = '#FF9800';
+        ctx.fillRect(144, 8, 16, 16);
+        
+        // Power-up Multi (16x16) - Púrpura
+        ctx.fillStyle = '#9C27B0';
+        ctx.fillRect(160, 8, 16, 16);
+        
+        function downloadSpritesheet() {
+            const link = document.createElement('a');
+            link.download = 'spritesheet.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        console.log('Spritesheet generado. Haz clic en "Descargar Spritesheet" para guardar.');
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html> 

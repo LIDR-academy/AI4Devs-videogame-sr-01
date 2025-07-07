@@ -18,6 +18,10 @@ class GameScene extends Phaser.Scene {
         this.paddleSpeed = 400;
     }
 
+    preload() {
+        this.load.image('bg_futurista', 'assets/images/fondo1.png');
+    }
+
     create() {
         // Configurar física
         this.physics.world.setBounds(0, 0, 800, 600);
@@ -40,6 +44,11 @@ class GameScene extends Phaser.Scene {
         
         // Inicializar estado del juego
         this.resetGame();
+
+        // Fondo atenuado
+        this.bgImage = this.add.image(400, 300, 'bg_futurista').setDisplaySize(800, 600);
+        this.bgImage.setAlpha(0.25); // Atenuado
+        this.bgImage.setDepth(-10); // Asegura que esté detrás de todo
     }
 
     createPaddle() {
@@ -68,6 +77,9 @@ class GameScene extends Phaser.Scene {
         }, this);
         
         this.ball.setData('speed', this.ballSpeed);
+        
+        // Posicionar la bola encima del paddle inicialmente
+        this.resetBall();
     }
 
     createBricks() {
@@ -125,7 +137,7 @@ class GameScene extends Phaser.Scene {
         this.levelText = this.add.text(16, 64, 'Nivel: 1', style);
 
         // Texto de instrucciones
-        this.instructionText = this.add.text(400, 300, 'Presiona ESPACIO para lanzar la bola', {
+        this.instructionText = this.add.text(400, 300, 'Presiona ESPACIO1 para lanzar la bola', {
             fontSize: '18px',
             fontFamily: 'Arial',
             fill: '#FFD93D',
@@ -144,10 +156,17 @@ class GameScene extends Phaser.Scene {
             }
         });
 
-        // Control por mouse/touch
+        // Control por mouse/touch para mover el paddle
         this.input.on('pointermove', (pointer) => {
-            if (this.paddle) {
+            if (this.paddle && this.gameStarted) {
                 this.paddle.x = Phaser.Math.Clamp(pointer.x, 32, 768);
+            }
+        });
+
+        // Control por touch para iniciar el juego
+        this.input.on('pointerdown', (pointer) => {
+            if (!this.gameStarted) {
+                this.startGame();
             }
         });
     }
@@ -164,32 +183,34 @@ class GameScene extends Phaser.Scene {
     }
 
     ballHitPaddle(ball, paddle) {
-        // Garantizar que la bola se coloque justo encima de la paleta
-        if (ball.y >= paddle.y - paddle.displayHeight / 2) {
-            ball.y = paddle.y - paddle.displayHeight / 2 - ball.displayHeight / 2;
+        // Verificar que la bola esté realmente colisionando con el paddle
+        if (!ball.body || !paddle.body) return;
+        
+        // Calcular la posición correcta de la bola
+        const paddleTop = paddle.y - paddle.height/2;
+        const ballBottom = ball.y + ball.height/2;
+        
+        // Si la bola está por debajo del paddle, corregir su posición
+        if (ballBottom > paddleTop) {
+            ball.y = paddleTop - ball.height/2;
         }
-
-        // Determinar la posición relativa del impacto
-        const halfWidth = paddle.displayWidth / 2;
-        const offset = Phaser.Math.Clamp(ball.x - paddle.x, -halfWidth, halfWidth);
-        const hitRatio = Math.abs(offset) / halfWidth; // 0 (centro) a 1 (bordes)
-
+        
+        // Calcular ángulo de rebote basado en dónde golpeó la bola
+        const hitPoint = (ball.x - paddle.x) / (paddle.width / 2);
+        const angle = hitPoint * Math.PI / 3; // -60° a +60°
+        
         const velocity = ball.getData('speed');
-
-        // Calcular el ángulo de salida con un máximo de ±60°
-        const baseAngle = Phaser.Math.DegToRad(60);
-        const angle = hitRatio * baseAngle;
-        const dir = offset >= 0 ? 1 : -1; // derecha o izquierda
-
-        let velX = dir * velocity * Math.sin(angle);
-        let velY = -Math.abs(velocity * Math.cos(angle));
-
-        // Garantizar una velocidad mínima hacia arriba
-        if (velY > -100) {
-            velY = -100;
+        
+        // Asegurar velocidad mínima hacia arriba
+        let newVelocityY = -velocity * Math.cos(angle);
+        if (newVelocityY > -100) {
+            newVelocityY = -100; // Velocidad mínima hacia arriba
         }
-
-        ball.setVelocity(velX, velY);
+        
+        ball.setVelocity(
+            velocity * Math.sin(angle),
+            newVelocityY
+        );
         
         // Reproducir sonido
         this.sound.play('paddle_hit');
@@ -289,7 +310,10 @@ class GameScene extends Phaser.Scene {
     startGame() {
         if (!this.gameStarted) {
             this.gameStarted = true;
-            this.instructionText.destroy();
+            if (this.instructionText) {
+                this.instructionText.destroy();
+                this.instructionText = null;
+            }
             
             // Lanzar la bola
             const angle = Phaser.Math.Between(-45, 45);
@@ -317,22 +341,40 @@ class GameScene extends Phaser.Scene {
         this.time.delayedCall(1000, () => {
             this.generateBricks();
             this.resetBall();
+            
+            // Mostrar instrucciones para el nuevo nivel
+            if (this.instructionText) {
+                this.instructionText.destroy();
+                this.instructionText = null;
+            }
+            this.instructionText = this.add.text(400, 350, 'Presiona ESPACIO2 para lanzar la bola', {
+                fontSize: '18px',
+                fontFamily: 'Arial',
+                fill: '#FFD93D',
+                align: 'center'
+            });
+            this.instructionText.setOrigin(0.5);
         });
     }
 
     resetBall() {
-        this.ball.setPosition(400, 530);
+        // Posicionar la bola encima del paddle
+        this.ball.setPosition(this.paddle.x, this.paddle.y - this.paddle.height/2 - this.ball.height/2);
         this.ball.setVelocity(0, 0);
         this.gameStarted = false;
         
         // Mostrar instrucciones nuevamente
-        this.instructionText = this.add.text(400, 300, 'Presiona ESPACIO para lanzar la bola', {
+        if (this.instructionText) {
+            this.instructionText.destroy();
+            this.instructionText = null;
+        }
+        /*this.instructionText = this.add.text(400, 400, 'Presiona ESPACIO3 para lanzar la bola', {
             fontSize: '18px',
             fontFamily: 'Arial',
             fill: '#FFD93D',
             align: 'center'
         });
-        this.instructionText.setOrigin(0.5);
+        this.instructionText.setOrigin(0.5);*/
     }
 
     resetGame() {
@@ -346,16 +388,56 @@ class GameScene extends Phaser.Scene {
         this.levelText.setText('Nivel: 1');
         
         this.resetBall();
+        
+        // Mostrar instrucciones al inicio del juego
+        if (this.instructionText) {
+            this.instructionText.destroy();
+            this.instructionText = null;
+        }
+        /*this.instructionText = this.add.text(400, 450, 'Presiona ESPACIO4 para lanzar la bola', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            fill: '#FFD93D',
+            align: 'center'
+        });
+        this.instructionText.setOrigin(0.5);*/
     }
 
     update() {
-        // Control de la paleta con teclado
-        if (this.cursors.left.isDown) {
-            this.paddle.setVelocityX(-this.paddleSpeed);
-        } else if (this.cursors.right.isDown) {
-            this.paddle.setVelocityX(this.paddleSpeed);
+        // Control de la paleta con teclado (solo cuando el juego ha comenzado)
+        if (this.gameStarted) {
+            if (this.cursors.left.isDown) {
+                this.paddle.setVelocityX(-this.paddleSpeed);
+            } else if (this.cursors.right.isDown) {
+                this.paddle.setVelocityX(this.paddleSpeed);
+            } else {
+                this.paddle.setVelocityX(0);
+            }
         } else {
+            // Si el juego no ha comenzado, mantener la bola encima del paddle
             this.paddle.setVelocityX(0);
+            if (this.ball && this.paddle) {
+                this.ball.setPosition(this.paddle.x, this.paddle.y - this.paddle.height/2 - this.ball.height/2);
+            }
+        }
+        
+        // Verificación adicional para evitar que la bola atraviese el paddle
+        if (this.ball && this.paddle && this.ball.body && this.paddle.body) {
+            const paddleTop = this.paddle.y - this.paddle.height/2;
+            const ballBottom = this.ball.y + this.ball.height/2;
+            
+            // Si la bola está por debajo del paddle y moviéndose hacia abajo
+            if (ballBottom > paddleTop && this.ball.body.velocity.y > 0) {
+                // Verificar si está dentro del rango horizontal del paddle
+                const paddleLeft = this.paddle.x - this.paddle.width/2;
+                const paddleRight = this.paddle.x + this.paddle.width/2;
+                
+                if (this.ball.x >= paddleLeft && this.ball.x <= paddleRight) {
+                    // Corregir posición y forzar rebote
+                    this.ball.y = paddleTop - this.ball.height/2;
+                    this.ball.setVelocityY(-Math.abs(this.ball.body.velocity.y));
+                }
+            }
         }
     }
 
@@ -367,6 +449,19 @@ class GameScene extends Phaser.Scene {
             this.gameOver();
         } else {
             this.resetBall();
+            
+            // Mostrar instrucciones para la nueva vida
+            if (this.instructionText) {
+                this.instructionText.destroy();
+                this.instructionText = null;
+            }
+            this.instructionText = this.add.text(400, 500, 'Presiona ESPACIO5 para lanzar la bola', {
+                fontSize: '18px',
+                fontFamily: 'Arial',
+                fill: '#FFD93D',
+                align: 'center'
+            });
+            this.instructionText.setOrigin(0.5);
         }
     }
 

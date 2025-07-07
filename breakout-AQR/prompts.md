@@ -1,5 +1,4 @@
-# Nombre de mi app?
-
+# Breakout Escolar Futurista - Prompts
 ## Proceso inicial
 
 1. Empecé haciendo una investigación sobre juegos, opciones y pedí las características siguientes:
@@ -25,7 +24,7 @@
 - spec.md
 - spriteSheet.md
 
-3.5 Para configurar el modelo de deepseek-coder:1.3b, tuve que:
+3.1 Para configurar el modelo de deepseek-coder:1.3b, tuve que:
 - Instalar Ollama
 - Descargar a instalar el modelo (siguiendo indicaciones del video https://training.lidr.co/posts/ai4devs-202505-seniors-%F0%9F%8E%A5-el-auge-de-los-modelos-llm-locales-%F0%9F%94%B4-14-min)
 - Hacer algunas variantes, porque es un poco viejo el video, al final me pidió una URL que no fue fácil encontrar, pero fue: http://localhost:11434
@@ -44,7 +43,23 @@
 
 # Pausa y reinicio
 - CodeGPT me dejó sin usos, me pasé a cursor, pero algo iba mal, entonces decidí reiniciar pasándole a ChatGPT el contexto inicial, traduje los prompts del ejemplo de super mario con éste prompt:
-*Me voy a basar en los conesjoe previos que me diste y vamos a generar prompts para usarlos en el IDE Cursor, tradúceme estos a español, adáptalos a nuestro "Breakout escolar futurista" y mejóralos como consideres, cada prompt está separado por ---.*
+*Me voy a basar en los conesjos previos que me diste y vamos a generar prompts para usarlos en el IDE Cursor, tradúceme estos a español, adáptalos a nuestro "Breakout escolar futurista" y mejóralos como consideres, cada prompt está separado por ---.*
 Ahí te van:
 ... aquí va copy/paste del ejemplo de super mario ...
 
+# Nuevo reinicio
+- Hice algo que no sé si debí, pasé demasiado contexto, generé muchos .md para specs iniciales e inicié con éste prompt:
+ ```md
+ Eres un desarrollador experto en juegos HTML5. Quiero que configures desde cero un clon de Breakout con temática escolar futurista usando **Phaser**.
+
+Considera lo siguiente:
+- Utiliza una estructura modular (por escenas).
+- Crea las carpetas y archivos base: `index.html`, `main.js`, `scenes/`, `assets/images`, `assets/audio`, `specs/`.
+- La paleta visual y gameplay están descritas en `specs/game-specs.md` y `specs/gameplay.md`.
+- Los sprites vienen de un solo archivo: `spritesheet.png` con su correspondiente `spritesheet.json` y está descrito en `specs/sprites.md`.
+
+Usa buenas prácticas, aplica principios **SOLID**, y asegúrate de que el juego cargue sin errores en navegadores de escritorio y móviles.
+ ```
+
+ - El resultado no fue malo, pero había preparado varios prompts y no alcancé a distinguir todo lo que hizo, por lo que iteré varias veces, al final entendí mucho, pero pude haberlo hecho por pedazos y avanzar más rápido, dejo todos los prompts finales en
+- El resultado no fue malo, pero había preparado varios prompts y no alcancé a distinguir todo lo que hizo, por lo que iteré varias veces, al final entendí mucho, pero pude haberlo hecho por pedazos y avanzar más rápido, dejo todos los prompts finales en [cursorChat.md](cursorChat.md)

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de Spritesheet - Breakout</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        .info { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Generador de Spritesheet para Breakout</h1>
+    
+    <div class="info">
+        <strong>Instrucciones:</strong>
+        <ol>
+            <li>Este generador crea un spritesheet básico para el juego Breakout</li>
+            <li>Haz clic en "Descargar Spritesheet" para guardar la imagen</li>
+            <li>Reemplaza el archivo <code>assets/images/spritesheet.png</code> con el descargado</li>
+        </ol>
+    </div>
+    
+    <canvas id="canvas" width="256" height="32"></canvas>
+    <br>
+    <button onclick="downloadSpritesheet()" style="padding: 10px; font-size: 16px;">Descargar Spritesheet</button>
+    
+    <div class="info">
+        <strong>Sprites incluidos:</strong>
+        <ul>
+            <li>Paddle (64x16) - Rosa</li>
+            <li>Ball (16x16) - Amarillo</li>
+            <li>Brick (32x16) - Azul</li>
+            <li>Power-ups (16x16) - Verde, Rojo, Naranja, Púrpura</li>
+        </ul>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Limpiar canvas con fondo transparente
+        ctx.clearRect(0, 0, 256, 32);
+        
+        // Paddle (64x16) - Rosa
+        ctx.fillStyle = '#F96167';
+        ctx.fillRect(0, 8, 64, 16);
+        
+        // Ball (16x16) - Amarillo
+        ctx.fillStyle = '#FFD93D';
+        ctx.fillRect(64, 8, 16, 16);
+        
+        // Brick (32x16) - Azul
+        ctx.fillStyle = '#547AA5';
+        ctx.fillRect(80, 8, 32, 16);
+        
+        // Power-up Enlarge (16x16) - Verde
+        ctx.fillStyle = '#4CAF50';
+        ctx.fillRect(112, 8, 16, 16);
+        
+        // Power-up Laser (16x16) - Rojo
+        ctx.fillStyle = '#F44336';
+        ctx.fillRect(128, 8, 16, 16);
+        
+        // Power-up Zoom (16x16) - Naranja
+        ctx.fillStyle = '#FF9800';
+        ctx.fillRect(144, 8, 16, 16);
+        
+        // Power-up Multi (16x16) - Púrpura
+        ctx.fillStyle = '#9C27B0';
+        ctx.fillRect(160, 8, 16, 16);
+        
+        function downloadSpritesheet() {
+            const link = document.createElement('a');
+            link.download = 'spritesheet.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            alert('Spritesheet descargado. Reemplaza el archivo en assets/images/spritesheet.png');
+        }
+        
+        console.log('Spritesheet generado. Haz clic en "Descargar Spritesheet" para guardar.');
+    </script>
+</body>
+</html> 
