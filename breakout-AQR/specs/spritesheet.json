@@ -1,0 +1,31 @@
+{
+    "frames": {
+      "paddle": {
+        "frame": { "x": 0, "y": 0, "w": 64, "h": 16 }
+      },
+      "ball": {
+        "frame": { "x": 64, "y": 0, "w": 16, "h": 16 }
+      },
+      "brick": {
+        "frame": { "x": 80, "y": 0, "w": 32, "h": 16 }
+      },
+      "powerup_enlarge": {
+        "frame": { "x": 112, "y": 0, "w": 16, "h": 16 }
+      },
+      "powerup_laser": {
+        "frame": { "x": 128, "y": 0, "w": 16, "h": 16 }
+      },
+      "powerup_zoom": {
+        "frame": { "x": 144, "y": 0, "w": 16, "h": 16 }
+      },
+      "powerup_multi": {
+        "frame": { "x": 160, "y": 0, "w": 16, "h": 16 }
+      }
+    },
+    "meta": {
+      "image": "spritesheet.png",
+      "size": { "w": 256, "h": 32 },
+      "scale": "1"
+    }
+  }
+  
