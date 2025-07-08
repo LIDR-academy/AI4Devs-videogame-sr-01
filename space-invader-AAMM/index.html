@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space Invaders</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      font-family: monospace;
+      color: #0ff;
+    }
+    #ui {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px;
+      background: #111;
+      display: flex;
+      justify-content: space-around;
+      z-index: 10;
+      font-size: 14px;
+    }
+    #start-screen, #game-over-screen, #wave-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #0f0;
+      background: #000a;
+      padding: 20px;
+      border: 2px solid #0f0;
+    }
+    #game-over-screen, #wave-message { display: none; }
+  </style>
+</head>
+<body>
+  <div id="ui">
+    <div id="score">Score: 0</div>
+    <div id="hiscore">Hi-Score: 0</div>
+    <div id="lives">Lives: 3</div>
+  </div>
+  <div id="start-screen">
+    <h1>SPACE INVADERS</h1>
+    <p>Press [Space] to Start</p>
+  </div>
+  <div id="game-over-screen">
+    <h1>GAME OVER</h1>
+    <p>Press [Space] to Restart</p>
+  </div>
+  <div id="wave-message">
+    <h2>Next Wave!</h2>
+    <p>Press [Space] to Continue</p>
+  </div>
+  <canvas id="game"></canvas>
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 800;
+    canvas.height = 600;
+
+    const startScreen = document.getElementById('start-screen');
+    const gameOverScreen = document.getElementById('game-over-screen');
+    const waveMessage = document.getElementById('wave-message');
+    const scoreEl = document.getElementById('score');
+    const livesEl = document.getElementById('lives');
+
+    let gameStarted = false;
+    let score = 0, hiscore = 0, lives = 3, keys = {}, bullets = [], enemies = [], enemyBullets = [], shelters = [];
+    let player = { x: 400, y: 560, w: 40, h: 20, cooldown: 0 };
+    let wave = 0, enemySpeed = 1, direction = 1, tick = 0;
+    let canShoot = true;
+    let awaitingNextWave = false;
+
+    const alienSprite = document.createElement("canvas");
+    alienSprite.width = alienSprite.height = 40;
+    const alienCtx = alienSprite.getContext("2d");
+    alienCtx.fillStyle = "#0f0";
+    [[8,10],[10,10],[12,10],[14,10],[16,10],[8,12],[16,12],[6,14],[18,14],[4,16],[20,16],[2,18],[22,18],[6,20],[18,20]].forEach(([x,y])=>{
+      alienCtx.fillRect(x, y, 2, 2);
+    });
+
+    document.addEventListener('keydown', e => keys[e.code] = true);
+    document.addEventListener('keyup', e => {
+      keys[e.code] = false;
+      if (e.code === 'Space') canShoot = true;
+    });
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playEnemyDestroyedSound() {
+      let o = audioCtx.createOscillator();
+      let g = audioCtx.createGain();
+      o.frequency.value = 100;
+      o.type = 'triangle';
+      o.connect(g);
+      g.connect(audioCtx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+      o.stop(audioCtx.currentTime + 0.3);
+    }
+
+    function resetGame() {
+      score = 0; lives = 3; wave = 0; enemySpeed = 1;
+      bullets = []; enemyBullets = []; shelters = [];
+      awaitingNextWave = false;
+      startWave();
+    }
+
+    function prepareNextWave() {
+      awaitingNextWave = true;
+      waveMessage.style.display = 'block';
+    }
+
+    function startWave() {
+      enemies = [];
+      direction = 1;
+      for (let r = 0; r < 2; r++) {
+        for (let c = 0; c < 10; c++) {
+          enemies.push({ x: 80 + c * 60, y: 60 + r * 50, w: 40, h: 30, fireCooldown: 0 });
+        }
+      }
+      shelters = [];
+      for (let i = 0; i < 4; i++) {
+        let x = 100 + i * 170;
+        for (let dx = 0; dx < 4; dx++) {
+          for (let dy = 0; dy < 3; dy++) {
+            shelters.push({ x: x + dx * 10, y: 500 + dy * 10, w: 10, h: 10, hp: 3 });
+          }
+        }
+      }
+      wave++;
+      enemySpeed += 0.2;
+      waveMessage.style.display = 'none';
+      awaitingNextWave = false;
+    }
+
+    function update() {
+      if (!gameStarted || awaitingNextWave) return;
+
+      if (keys['ArrowLeft']) player.x -= 5;
+      if (keys['ArrowRight']) player.x += 5;
+      player.x = Math.max(0, Math.min(canvas.width - player.w, player.x));
+
+      if (keys['Space'] && player.cooldown <= 0 && canShoot) {
+        bullets.push({ x: player.x + player.w / 2 - 2, y: player.y, w: 4, h: 10 });
+        player.cooldown = 20;
+        canShoot = false;
+      }
+      if (player.cooldown > 0) player.cooldown--;
+
+      bullets.forEach(b => b.y -= 8);
+      bullets = bullets.filter(b => b.y > 0);
+
+      enemyBullets.forEach(b => b.y += 4);
+      enemyBullets = enemyBullets.filter(b => b.y < canvas.height);
+
+      enemies.forEach(e => {
+        if (e.fireCooldown <= 0 && Math.random() < 0.0008) {
+          enemyBullets.push({ x: e.x + e.w / 2 - 2, y: e.y + e.h, w: 4, h: 10 });
+          e.fireCooldown = 150 + Math.random() * 150;
+        } else {
+          e.fireCooldown--;
+        }
+      });
+
+      let hitBottom = false;
+      enemies.forEach(e => e.x += direction * enemySpeed);
+      let bounds = enemies.reduce((acc, e) => {
+        acc.left = Math.min(acc.left, e.x);
+        acc.right = Math.max(acc.right, e.x + e.w);
+        acc.bottom = Math.max(acc.bottom, e.y + e.h);
+        return acc;
+      }, { left: Infinity, right: 0, bottom: 0 });
+      if (bounds.left < 0 || bounds.right > canvas.width) {
+        direction *= -1;
+        enemies.forEach(e => e.y += 20);
+      }
+      if (bounds.bottom >= player.y) hitBottom = true;
+
+      bullets.forEach(b => {
+        enemies.forEach((e, ei) => {
+          if (b.x < e.x + e.w && b.x + b.w > e.x && b.y < e.y + e.h && b.y + b.h > e.y) {
+            enemies.splice(ei, 1);
+            bullets = bullets.filter(bx => bx !== b);
+            score += 10;
+            if (score % 500 === 0) lives++;
+            playEnemyDestroyedSound();
+          }
+        });
+      });
+
+      enemyBullets.forEach(b => {
+        if (b.x < player.x + player.w && b.x + b.w > player.x && b.y < player.y + player.h && b.y + b.h > player.y) {
+          lives--;
+          player.x = 400;
+          bullets = []; enemyBullets = [];
+        }
+      });
+
+      shelters.forEach((s, si) => {
+        bullets.forEach((b, bi) => {
+          if (b.x < s.x + s.w && b.x + b.w > s.x && b.y < s.y + s.h && b.y + b.h > s.y) {
+            s.hp--;
+            bullets.splice(bi, 1);
+          }
+        });
+        enemyBullets.forEach((b, bi) => {
+          if (b.x < s.x + s.w && b.x + b.w > s.x && b.y < s.y + s.h && b.y + b.h > s.y) {
+            s.hp--;
+            enemyBullets.splice(bi, 1);
+          }
+        });
+        if (s.hp <= 0) shelters.splice(si, 1);
+      });
+
+      if (enemies.length === 0 && !awaitingNextWave) {
+        prepareNextWave();
+      }
+
+      if (lives <= 0 || hitBottom) {
+        gameStarted = false;
+        gameOverScreen.style.display = 'block';
+      }
+      scoreEl.textContent = 'Score: ' + score;
+      livesEl.textContent = 'Lives: ' + lives;
+    }
+
+    function draw() {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#0ff';
+      ctx.beginPath();
+      ctx.moveTo(player.x + player.w / 2, player.y);
+      ctx.lineTo(player.x, player.y + player.h);
+      ctx.lineTo(player.x + player.w, player.y + player.h);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#fff';
+      bullets.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
+      ctx.fillStyle = '#f00';
+      enemyBullets.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
+
+      enemies.forEach(e => {
+        ctx.drawImage(alienSprite, e.x, e.y, e.w, e.h);
+      });
+
+      shelters.forEach(s => {
+        ctx.fillStyle = ['#888', '#666', '#444'][s.hp - 1];
+        ctx.fillRect(s.x, s.y, s.w, s.h);
+      });
+    }
+
+    function loop() {
+      update();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space') {
+        if (!gameStarted) {
+          startScreen.style.display = 'none';
+          gameOverScreen.style.display = 'none';
+          resetGame();
+          gameStarted = true;
+        } else if (awaitingNextWave) {
+          startWave();
+        }
+      }
+    });
+
+    loop();
+  </script>
+</body>
+</html>
