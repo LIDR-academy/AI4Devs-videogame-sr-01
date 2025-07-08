@@ -1,0 +1,421 @@
+/* Game Styling - Prince of Persia Theme */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cinzel', serif;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    color: #d4af37;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#gameContainer {
+    position: relative;
+    border: 3px solid #d4af37;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    background: #000;
+    max-width: 100vw;
+    max-height: 100vh;
+}
+
+#gameCanvas {
+    display: block;
+    background: linear-gradient(180deg, #1e1e3f, #2d2d5f);
+    border-radius: 7px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Game UI */
+#gameUI {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#score, #level {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 2px solid #d4af37;
+    font-weight: 600;
+    font-size: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Mobile Touch Controls */
+.mobile-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    display: none;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 15;
+    pointer-events: auto;
+}
+
+.mobile-left, .mobile-right {
+    display: flex;
+    gap: 15px;
+}
+
+.mobile-btn {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    background: linear-gradient(45deg, #d4af37, #f4e99b);
+    color: #1a1a2e;
+    border: 3px solid #b8860b;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.direction-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.jump-btn {
+    width: 80px;
+    height: 60px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.action-btn {
+    width: 70px;
+    height: 50px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.mobile-btn:active {
+    background: linear-gradient(45deg, #f4e99b, #d4af37);
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.6);
+}
+
+.mobile-btn:hover {
+    background: linear-gradient(45deg, #f4e99b, #d4af37);
+}
+
+/* Screen Overlays */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    border-radius: 7px;
+}
+
+.screen.hidden {
+    display: none;
+}
+
+.screen h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    background: linear-gradient(45deg, #d4af37, #f4e99b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.screen p {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    text-align: center;
+    line-height: 1.6;
+    color: #e6e6e6;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Buttons */
+button {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding: 15px 30px;
+    margin: 20px;
+    background: linear-gradient(45deg, #d4af37, #b8941f);
+    color: #1a1a2e;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+button:hover {
+    background: linear-gradient(45deg, #f4e99b, #d4af37);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+}
+
+/* Game Complete Screen Special Styling */
+#gameCompleteScreen h1 {
+    animation: celebrate 2s ease-in-out infinite alternate;
+}
+
+@keyframes celebrate {
+    from {
+        transform: scale(1);
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    }
+    to {
+        transform: scale(1.05);
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.6);
+    }
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 1100px) {
+    #gameContainer {
+        width: 95vw;
+        max-width: 95vw;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        height: auto;
+    }
+    
+    .screen h1 {
+        font-size: 2.5rem;
+    }
+    
+    .screen p {
+        font-size: 1rem;
+    }
+    
+    button {
+        font-size: 1.1rem;
+        padding: 12px 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    #gameContainer {
+        width: 100vw;
+        height: 100vh;
+        border: 2px solid #d4af37;
+        border-radius: 5px;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        height: calc(100vh - 160px); /* Leave space for controls */
+        border-radius: 5px;
+    }
+    
+    .screen h1 {
+        font-size: 2rem;
+    }
+    
+    .screen p {
+        font-size: 0.9rem;
+        margin: 8px 0;
+        padding: 0 20px;
+    }
+    
+    button {
+        font-size: 1rem;
+        padding: 10px 20px;
+        margin: 10px;
+    }
+    
+    #score, #level {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+    
+    .mobile-controls {
+        bottom: 10px;
+        left: 15px;
+        right: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .direction-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .jump-btn {
+        width: 70px;
+        height: 50px;
+        font-size: 12px;
+    }
+    
+    .action-btn {
+        width: 60px;
+        height: 40px;
+        font-size: 10px;
+    }
+    
+    .mobile-left, .mobile-right {
+        gap: 10px;
+    }
+    
+    .screen h1 {
+        font-size: 1.5rem;
+    }
+    
+    .screen p {
+        font-size: 0.8rem;
+        padding: 0 15px;
+    }
+    
+    button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+}
+
+/* Audio Controls */
+#audioControls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: auto;
+}
+
+.audio-btn {
+    background: linear-gradient(45deg, #d4af37, #f4e99b);
+    border: 2px solid #b8860b;
+    border-radius: 8px;
+    color: #1a1a2e;
+    font-size: 18px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    min-width: 40px;
+    font-family: 'Cinzel', serif;
+}
+
+.audio-btn:hover {
+    background: linear-gradient(45deg, #f4e99b, #d4af37);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.audio-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.audio-btn.muted {
+    background: linear-gradient(45deg, #666, #888);
+    color: #ccc;
+}
+
+.audio-label {
+    font-size: 12px;
+    opacity: 0.9;
+    color: #d4af37;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    font-weight: 600;
+}
+
+/* Audio Activation Hint */
+.audio-hint {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: 'Cinzel', serif;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.audio-hint-content {
+    text-align: center;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 3px solid #d4af37;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+}
+
+.audio-hint-content p {
+    color: #d4af37;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.audio-hint-subtitle {
+    font-size: 16px !important;
+    color: #f4e99b !important;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+} 
