@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tetris - AI4Devs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>TETRIS</h1>
+            <div class="game-controls">
+                <button id="pause-btn">Pause</button>
+                <button id="restart-btn">Restart</button>
+            </div>
+        </div>
+        <div class="game-area">
+            <div class="game-board-container">
+                <canvas id="game-board" width="300" height="600"></canvas>
+                <div class="game-overlay" id="game-over">
+                    <div class="overlay-content">
+                        <h2>Game Over</h2>
+                        <p id="final-score"></p>
+                        <button id="restart-btn-overlay">Restart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="game-info">
+                <div class="info-section">
+                    <h3>Score</h3>
+                    <div class="score-display">
+                        <div class="score-item">Score: <span id="score">0</span></div>
+                        <div class="score-item">Level: <span id="level">1</span></div>
+                        <div class="score-item">Lines: <span id="lines">0</span></div>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <h3>Next</h3>
+                    <canvas id="next-piece" width="80" height="80"></canvas>
+                </div>
+                <div class="info-section">
+                    <h3>Controls</h3>
+                    <div class="controls-list">
+                        <div class="control-item"><span class="key">←</span> Move Left</div>
+                        <div class="control-item"><span class="key">→</span> Move Right</div>
+                        <div class="control-item"><span class="key">↑</span> Rotate</div>
+                        <div class="control-item"><span class="key">↓</span> Soft Drop</div>
+                        <div class="control-item"><span class="key">Space</span> Hard Drop</div>
+                        <div class="control-item"><span class="key">P</span> Pause</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="tetris.js"></script>
+</body>
+</html> 
