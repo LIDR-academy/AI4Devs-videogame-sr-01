@@ -1,0 +1,146 @@
+/* General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.game-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.game-info {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.game-info p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* Game Board */
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(9, 50px);
+  grid-template-rows: repeat(9, 50px);
+  gap: 0;
+  margin: 0 auto 20px;
+  border: 3px solid #333;
+  background-color: #333;
+}
+
+.cell {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.cell:hover {
+  opacity: 0.8;
+}
+
+/* Region Colors */
+.region-1 {
+  background-color: #b19cd9;
+} /* Light purple */
+.region-2 {
+  background-color: #ffb6c1;
+} /* Light pink */
+.region-3 {
+  background-color: #98fb98;
+} /* Pale green */
+.region-4 {
+  background-color: #ffa07a;
+} /* Light salmon */
+.region-5 {
+  background-color: #87ceeb;
+} /* Sky blue */
+.region-6 {
+  background-color: #f0e68c;
+} /* Khaki yellow */
+.region-7 {
+  background-color: #dda0dd;
+} /* Plum */
+.region-8 {
+  background-color: #d3d3d3;
+} /* Light gray */
+.region-9 {
+  background-color: #20b2aa;
+} /* Light sea green */
+
+/* Cell States */
+.cell.x::before {
+  content: "✕";
+  color: #666;
+  font-weight: bold;
+}
+
+.cell.crown::before {
+  content: "👑";
+  font-size: 30px;
+}
+
+.cell.crown.conflict::before {
+  content: "👑";
+  color: red;
+  filter: drop-shadow(0 0 2px red);
+}
+
+/* Controls */
+.controls {
+  margin-bottom: 20px;
+}
+
+.btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+
+.btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Message */
+.message {
+  font-size: 18px;
+  font-weight: bold;
+  min-height: 30px;
+}
+
+.message.success {
+  color: #4caf50;
+}
