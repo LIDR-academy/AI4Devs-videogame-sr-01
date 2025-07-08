@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quest Kids - Cosmic Explorers</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>Math Quest Kids</h1>
+            <p class="subtitle">Cosmic Math Explorers</p>
+        </header>
+
+        <div id="start-screen" class="game-screen active">
+            <h2>Choose Your Cosmic Mission!</h2>
+            <div class="operation-selection">
+                <button class="operation-btn" data-operation="addition">➕ Addition</button>
+                <button class="operation-btn" data-operation="subtraction">➖ Subtraction</button>
+                <button class="operation-btn" data-operation="multiplication">✖️ Multiplication</button>
+            </div>
+            <p class="instruction">Select an operation to begin your space adventure!</p>
+        </div>
+
+        <div id="game-screen" class="game-screen">
+            <div class="game-info">
+                <span id="score">Score: 0</span>
+                <span id="level">Level: 1</span>
+            </div>
+            <div class="question-area">
+                <p id="question">What is 5 + 3?</p>
+                <img id="character-avatar" src="assets/astronaut_neutral.png" alt="Astronaut Avatar" class="avatar">
+            </div>
+            <div id="answer-options" class="answer-options">
+                <button class="answer-btn">8</button>
+                <button class="answer-btn">7</button>
+                <button class="answer-btn">9</button>
+            </div>
+            <div id="feedback-message" class="feedback-message"></div>
+        </div>
+
+        <div id="end-screen" class="game-screen">
+            <h2>Mission Accomplished!</h2>
+            <p class="end-message">You've explored the cosmos and mastered your math skills!</p>
+            <p class="final-score">Your Final Score: <span id="final-score">0</span></p>
+            <button id="restart-btn" class="action-btn">Explore Again!</button>
+        </div>
+    </div>
+
+    <audio id="correct-sound" src="assets/correct_sound.wav" preload="auto"></audio>
+    <audio id="incorrect-sound" src="assets/incorrect_sound.wav" preload="auto"></audio>
+    <audio id="level-up-sound" src="assets/level_up_sound.wav" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
