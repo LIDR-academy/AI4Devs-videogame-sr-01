@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flappy Bird Clone</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-container" aria-label="Flappy Bird Game">
+    <h1 class="main-title">Flappy Bird Minimal</h1>
+      <header class="scoreboard" aria-live="polite">
+        <span id="score">0</span>
+        <span class="divider">|</span>
+        <span id="best">Best: 0</span>
+      </header>
+    <canvas id="game-canvas" tabindex="0" aria-label="Game area"></canvas>
+    <section id="game-over" class="game-over hidden" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
+      <h2 id="game-over-title">Game Over</h2>
+      <p id="final-score"></p>
+      <button id="restart-btn" aria-label="Restart game">Restart</button>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html> 
