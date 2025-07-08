@@ -1,0 +1,11 @@
+{
+  "name": "flappy-bird-clone",
+  "version": "1.0.0",
+  "description": "Minimalist Flappy Bird clone in vanilla JS, HTML, and CSS.",
+  "scripts": {
+    "start": "npx live-server public"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+} 
