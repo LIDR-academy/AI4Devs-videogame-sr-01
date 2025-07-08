@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>AI4Devs Blackjack</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="table-container">
+    <h1>AI4Devs Blackjack</h1>
+    <div class="status-bar">
+        <span id="player-money">Dinero: 50 €</span>
+    </div>
+    <form id="bet-form">
+        <label for="bet-amount">Apuesta (€):</label>
+        <input type="number" id="bet-amount" min="10" value="10" step="10" required>
+        <button type="submit">Apostar y Repartir</button>
+    </form>
+    <div class="cards-area">
+        <div class="hand">
+            <h2>Jugador <span id="player-score"></span></h2>
+            <div id="player-cards" class="cards"></div>
+            <!-- Aquí debajo, añadimos la visualización de las apuestas -->
+            <div id="player-bets"></div>
+        </div>
+        <div class="hand">
+            <h2>Banca <span id="dealer-score"></span></h2>
+            <div id="dealer-cards" class="cards"></div>
+        </div>
+    </div>
+    <div class="actions">
+        <button id="hit-btn" disabled>Pedir</button>
+        <button id="stand-btn" disabled>Plantarse</button>
+    </div>
+    <div id="message"></div>
+    <button id="new-game-btn" style="display:none;">Nueva Partida</button>
+</div>
+<script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+body {
+    background: #1a3d18;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.table-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 30px 30px 40px 30px;
+    background: radial-gradient(circle, #217a37 80%, #15331e 100%);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+    text-align: center;
+}
+
+h1 {
+    color: #ffd700;
+    margin-bottom: 12px;
+    font-size: 2.3rem;
+    letter-spacing: 2px;
+    text-shadow: 1px 2px 8px #222;
+}
+
+.status-bar {
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+#bet-form {
+    margin: 12px 0 24px 0;
+}
+
+#bet-amount {
+    width: 80px;
+    padding: 6px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-left: 8px;
+}
+
+#bet-form button {
+    background: #ffd700;
+    color: #155e2d;
+    font-weight: bold;
+    border: none;
+    padding: 8px 18px;
+    margin-left: 14px;
+    border-radius: 7px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px #8884;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+#bet-form button:hover { background: #ffe066; }
+
+.cards-area {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.hand {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.cards {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    min-height: 90px;
+    margin-top: 10px;
+}
+
+.card-img {
+    width: 72px;
+    height: 110px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px #2227;
+    background: #fff;
+}
+
+.actions {
+    margin-bottom: 12px;
+}
+
+.actions button {
+    background: #ffe066;
+    color: #1a3d18;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 25px;
+    margin: 0 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #8883;
+    transition: background 0.18s;
+}
+
+.actions button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#message {
+    font-size: 1.15rem;
+    color: #fff;
+    min-height: 36px;
+    margin: 12px 0 6px 0;
+    text-shadow: 1px 1px 3px #444;
+}
+
+#new-game-btn {
+    background: #ffd700;
+    color: #155e2d;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 28px;
+    font-size: 1.2rem;
+    margin-top: 16px;
+    box-shadow: 0 2px 8px #8884;
+    cursor: pointer;
+    display: inline-block;
+    transition: background 0.18s;
+}
+#new-game-btn:hover { background: #ffe066; }
+
+#player-bets {
+    margin-top: 8px;
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    min-height: 28px;
+}
+.player-bet-label {
+    background: #ffe066;
+    color: #155e2d;
+    font-weight: bold;
+    border-radius: 7px;
+    padding: 4px 16px;
+    font-size: 1.04rem;
+    box-shadow: 0 1px 4px #2222;
+    margin-top: 0;
+    display: inline-block;
+}
