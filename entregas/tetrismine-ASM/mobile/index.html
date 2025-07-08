@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>TetrisMine · Mobile</title>
+
+  <!-- Escalado adecuado en smartphones -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tipografía arcade y hoja de estilos base para móvil -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/mobile.css" />
+</head>
+<body>
+  <!-- Welcome Screen (hidden once game starts) -->
+  <div id="welcomeScreen" class="welcomeScreen">
+    <img id="welcomeLogo" src="../assets/logo_tetrismine.png" alt="TetrisMine logo" />
+    <input id="playerName" type="text" maxlength="12" placeholder="YOUR NAME" aria-label="Player name" />
+    <div class="startButtons">
+      <button id="startEasyBtn"  disabled class="arcadeBtn" aria-label="Start Easy Mode">EASY MODE</button>
+      <button id="startHardBtn"  disabled class="arcadeBtn" aria-label="Start Hardcore Mode">HARDCORE MODE</button>
+    </div>
+
+    <h3>TOP 5 EASY</h3>
+    <ol id="leaderboardEasy" class="leaderboard"></ol>
+    <h3>TOP 5 HARDCORE</h3>
+    <ol id="leaderboardHard" class="leaderboard"></ol>
+    <button id="shareBtn" class="share-button" aria-label="Share this game">SHARE</button>
+  </div>
+
+  <div id="mobileApp" class="hidden">
+    <!-- Top bar: logo + HUD (next piece & scores) -->
+    <div class="topBar">
+      <img id="logo" src="../assets/logo_tetrismine.png" alt="TetrisMine logo" />
+
+      <div id="hud">
+        <p id="modeLabel" class="modeLbl"></p>
+        <div class="scores">
+          <p><span id="topLabel">TOP</span> <span id="topScore">100</span></p>
+          <p><span id="scoreLabel">SCORE</span> <span id="score">100</span></p>
+        </div>
+        <div class="nextRow">
+          <p id="nextLabel">NEXT</p>
+          <canvas id="nextCanvas" width="60" height="60"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main board (canvas inserted dynamically) -->
+    <div id="board"></div>
+
+    <!-- Discard button occupies full width -->
+    <button id="discard-btn" class="actionBtn" aria-label="Discard current piece">DISCARD</button>
+
+    <!-- Control buttons row -->
+    <div class="controls">
+      <button id="btn-left"  class="ctrl-btn" aria-label="Move left"><img src="assets/arrow-left.svg" alt=""></button>
+      <button id="btn-down"  class="ctrl-btn" aria-label="Move down"><img src="assets/arrow-down.svg" alt=""></button>
+      <button id="btn-right" class="ctrl-btn" aria-label="Move right"><img src="assets/arrow-right.svg" alt=""></button>
+    </div>
+
+    <!-- Placeholder for Game Over popup if needed -->
+    <div id="game-over"></div>
+  </div>
+
+  <!-- Librerías comunes reutilizadas -->
+  <script src="../modal.js"></script>
+  <script src="../messages.js"></script>
+  <script src="../leaderboard.js"></script>
+
+  <!-- Punto de entrada móvil -->
+  <script type="module" src="scripts/main-mobile.js"></script>
+</body>
+</html> 
