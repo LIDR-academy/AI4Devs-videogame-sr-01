@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2048 - 5x5 Target 4096</title>
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>2048</h1>
+      <div class="subtitle">5x5 • Target: 4096</div>
+
+      <div class="game-info">
+        <div class="score-container">
+          <div class="score-box">
+            <div class="score-label">Puntuación</div>
+            <div class="score-value" id="score">0</div>
+          </div>
+          <div class="score-box">
+            <div class="score-label">Mejor</div>
+            <div class="score-value" id="best-score">0</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button onclick="game.restart()">Nuevo Juego</button>
+          <button onclick="game.undo()" id="undo-btn">Deshacer</button>
+        </div>
+      </div>
+
+      <div class="instructions">
+        Usa las flechas del teclado para mover las fichas. Cuando dos fichas con el mismo número se tocan, ¡se fusionan
+        en una!
+      </div>
+
+      <div class="game-board" id="game-board"></div>
+    </div>
+
+    <div class="game-message" id="game-message">
+      <div class="message-content">
+        <div class="message-title" id="message-title">¡Felicidades!</div>
+        <div class="message-text" id="message-text">¡Has alcanzado 4096!</div>
+        <button onclick="game.restart()">Jugar de Nuevo</button>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
