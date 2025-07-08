@@ -1,266 +1,352 @@
-// --- Parámetros -------------------------------------------------------------
-const ROWS = 20, COLS = 10;
-let board, score, topScore, gravityId, nextPiece, justSpawned, discardCount;
+import { createEmptyBoard, getCell } from './board.js';
+import {
+  initRenderer,
+  renderBoard,
+  renderNextPiece,
+  renderScore,
+  renderGameOver
+} from './render.js';
 
-// ------------------ util ------------------
-// --- Generador de piezas: modo normal y modo test ---
-//const PIECE_SEQUENCE = [1,'B',1,2,2,2,'B',2,1,1,1,'B']; // ← aquí puedes poner los valores que quieras, ej: [1,2,'B',1,1,'B']
-//const PIECE_SEQUENCE = [3,3,1,2,2,2,'B',2,1,1,1,'B']; // ← aquí puedes poner los valores que quieras, ej: [1,2,'B',1,1,'B']
+const ROWS = 20;
+const COLS = 10;
+const GRAVITY_INTERVAL = 800; // milliseconds between automatic drops
+const PIECE_VALUES = ['B', 1, 2, 3, 4, 5, 6, 7, 8];
 
-function randPiece() {
-  //if (PIECE_SEQUENCE.length > 0) {
-  //  return PIECE_SEQUENCE.shift(); // saca el primero de la lista
-  //}
-  // modo normal (random)
-  return (Math.random() < 0.2 ? 'B' : Math.floor(Math.random() * 8) + 1);
+// Helpers de timing para pausar/reanudar el loop
+function _pauseLoop(instance) {
+  if (instance.loop) {
+    clearInterval(instance.loop);
+    instance.loop = null;
+  }
 }
 
-//modo PRO: const randPiece = () => (Math.random() < 0.2 ? 'B' : Math.floor(Math.random() * 8) + 1);
-
-const activePos = () => {
-  for (let y = 0; y < ROWS; y++)
-    for (let x = 0; x < COLS; x++)
-      if (board[y][x].justPlaced) return { y, x };
-  return null;
-};
-
-/* helpers to pause / resume gravity */
-const pauseGame  = () => { clearInterval(gravityId); gravityId = null; };
-const resumeGame = () => { if (!gravityId) gravityId = setInterval(tick, 500); };
-
-// ------------------ mecánica --------------
-function spawnPiece() {
-  const value = nextPiece ?? randPiece();
-  nextPiece = randPiece();
-
-  const x = Math.floor(COLS / 2), y = 0;
-  if (board[y][x].value) return gameOver();
-
-  board[y][x] = { value, fixed: false, justPlaced: true };
-  justSpawned = true;
-  Render.render(board, nextPiece, score, topScore);
+function _resumeLoop(instance) {
+  if (!instance.loop) {
+    instance.loop = setInterval(() => instance._tick(), GRAVITY_INTERVAL);
+  }
 }
 
-function fixCell(cell) {
-  cell.fixed = true;
-  cell.justPlaced = false;
+// Helper para clonar el tablero profundamente (incluye Set)
+function _cloneBoard(board) {
+  return board.map((row) =>
+    row.map((cell) => ({
+      value: cell.value,
+      fixed: cell.fixed,
+      justPlaced: cell.justPlaced,
+      possibleValues: new Set(cell.possibleValues)
+    }))
+  );
 }
 
-function tick() {
-  if (justSpawned) {
-    justSpawned = false;
-    return Render.render(board, nextPiece, score, topScore);
+export default class Game {
+  constructor(ruleSet, rows = ROWS, cols = COLS) {
+    this.rows = rows;
+    this.cols = cols;
+    this.board = createEmptyBoard(rows, cols);
+
+    // RuleSet strategy (easy / hard)
+    this.rules = ruleSet;
+
+    this.score = 100;
+    this.topScore = 100;
+    this.discardCount = 0;
+    this.gameOver = false;
+
+    this.currentPiece = null;
+    this.nextPiece = this._randomPiece();
+
+    // Initialise renderer
+    initRenderer(this.board);
+    renderScore(this.score, this.topScore);
+    renderNextPiece(this.nextPiece);
+
+    this._spawnPiece();
+    this.loop = setInterval(() => this._tick(), GRAVITY_INTERVAL);
+
+    this._bindControls();
+
+    // Inicializar texto del botón de descarte con penalización actual
+    this._updateDiscardButtonLabel();
+
+    // Botón de descarte
+    const discardBtn = document.getElementById('discard-btn');
+    if (discardBtn) {
+      discardBtn.addEventListener('click', () => {
+        if (!this.gameOver) this._discardPiece();
+      });
+    }
   }
 
-  const pos = activePos();
-  if (!pos) { spawnPiece(); return; }
-  const { y, x } = pos;
+  _randomPiece() {
+    return {
+      value: PIECE_VALUES[Math.floor(Math.random() * PIECE_VALUES.length)],
+      x: Math.floor(this.cols / 2),
+      y: 0
+    };
+  }
 
-  if (y === ROWS - 1 || board[y + 1][x].value) {
-    fixCell(board[y][x]);
+  _spawnPiece() {
+    this.currentPiece = this.nextPiece;
+    this.currentPiece.x = Math.floor(this.cols / 2);
+    this.currentPiece.y = 0;
+    this.nextPiece = this._randomPiece();
 
-    if (!Validation.validateBoard(board)){
-      handleInvalidMove(y, x);
+    /* Si la celda de aparición está ocupada → Game Over */
+    if (getCell(this.board, this.currentPiece.y, this.currentPiece.x).fixed) {
+      this._endGame();
       return;
     }
 
-    addScore(100);
-    Render.render(board, nextPiece, score, topScore);
-    spawnPiece();
-    return;
+    /* ─── Render inmediato ─── */
+    renderBoard(this.board, this.currentPiece);
+    renderNextPiece(this.nextPiece);
   }
 
-  board[y + 1][x] = { ...board[y][x] };
-  board[y][x] = Board.createEmptyCell();
-  Render.render(board, nextPiece, score, topScore);
-}
+  _movePiece(dx, dy) {
+    const newX = this.currentPiece.x + dx;
+    const newY = this.currentPiece.y + dy;
 
-function moveHoriz(dx) {
-  const p = activePos();
-  if (!p) return;
-  const { y, x } = p, nx = x + dx;
-  if (nx < 0 || nx >= COLS || board[y][nx].value) return;
-  board[y][nx] = { ...board[y][x] };
-  board[y][x] = Board.createEmptyCell();
-  Render.render(board, nextPiece, score, topScore);
-}
+    if (newX < 0 || newX >= this.cols || newY >= this.rows) return false;
+    const target = getCell(this.board, newY, newX);
+    if (target.fixed) return false;
 
-// ------------------ input -----------------
-function key(e) {
-  if (!gravityId) return;                 // ← ignore controls when paused
-  if (e.key === 'ArrowLeft')  moveHoriz(-1);
-  if (e.key === 'ArrowRight') moveHoriz(1);
-  if (e.key === 'ArrowDown')  tick();
-}
-
-function updateDiscardButtonText() {
-  const penalty = (discardCount + 1) * 5;
-  document.getElementById('discardBtn').textContent = `Discard (-${penalty} pts)`;
-}
-
-function discard() {
-  if (!gravityId) return;                 // ← ignore click when paused
-  const penalty = (discardCount + 1) * 5;
-  if (score < penalty) {
-    Modal.show(MSG.notEnoughPoints);
-    return;
+    this.currentPiece.x = newX;
+    this.currentPiece.y = newY;
+    return true;
   }
-  const p = activePos();
-  if (!p) return;                 // no hay ficha en caída
 
-  /* 3. Eliminar la ficha, restar puntos y generar nueva */
-  board[p.y][p.x] = Board.createEmptyCell();
-  score -= penalty;
-  discardCount++;
-  updateDiscardButtonText();
-  Render.render(board, nextPiece, score, topScore);
-  spawnPiece();
-}
+  _fixCurrentPiece() {
+    const snapshot = _cloneBoard(this.board); // estado antes de mutar
+    let shouldSpawnNext = true;
+    const { x, y, value } = this.currentPiece;
+    const cell = getCell(this.board, y, x);
+    cell.value = value;
+    cell.fixed = true;
+    cell.justPlaced = true;
 
-// ------------------ ciclo -----------------
-function gameOver() {
-  pauseGame();
+    // Validación completa niveles 1-3
+    const valid = this.rules.isMoveValid(this.board, y, x);
 
-  /* store topScore not final score */
-  if (playerName){
-    const arr = getScores();
-    arr.push({ name:playerName, score:topScore });
-    arr.sort((a,b)=>b.score-a.score);
-    saveScores(arr);
+    if (!valid) {
+      // El movimiento es inválido: revertimos cualquier bomba añadida
+      _rollbackToSnapshot(this.board, snapshot);
+      renderBoard(this.board, null);
+
+      // Movimiento inválido → aplicar penalización
+      const mistakePenalty = this.rules.getMistakePenalty();
+      if (this.score >= mistakePenalty) {
+        this.score -= mistakePenalty;
+        // Eliminar la pieza inválida para que no quede fijada
+        cell.value = null;
+        cell.fixed = false;
+        cell.justPlaced = false;
+        renderScore(this.score, this.topScore);
+
+        // Pausa y muestra popup; al cerrar, continúa
+        const missMsg = mistakePenalty >= 100 ? MSG.mistakeMinus100 : MSG.mistakeMinus50;
+        _pauseLoop(this);
+        window.Modal && Modal.show(missMsg, () => {
+          this._spawnPiece();
+          _resumeLoop(this);
+        });
+        shouldSpawnNext = false;
+        return shouldSpawnNext;
+      } else {
+        // Restaurar también el tablero antes de terminar la partida
+        _rollbackToSnapshot(this.board, snapshot);
+        renderBoard(this.board, null);
+        this.score = 0;
+        renderScore(this.score, this.topScore);
+        this._endGame();
+        shouldSpawnNext = false;
+        return shouldSpawnNext; // termina aquí
+      }
+    }
+
+    // Caso válido: la pieza queda fijada definitivamente
+    cell.justPlaced = false;
+
+    // ─── RECOMPENSA POR JUGADA CORRECTA ───
+    this.score += this.rules.getReward();
+    this._updateTopScore();
+    renderScore(this.score, this.topScore);
+
+    return shouldSpawnNext;
   }
-  renderLeaderboard();
 
-  /* build HTML with two buttons */
-  Modal.showHtml(`
-       <p style="margin-bottom:18px">${MSG.gameOver}</p>
-       <button id="btnAgain" class="modalBtn">${MSG.playAgain}</button>
-       <button id="btnMenu"  class="modalBtn">${MSG.mainMenu}</button>
-  `);
+  _tick() {
+    if (this.gameOver) return;
 
-  document.getElementById('btnAgain').onclick = () => {
-       Modal.hide();
-       resetGame();
-  };
-  document.getElementById('btnMenu').onclick  = () => {
-       Modal.hide();
-       document.getElementById('welcomeScreen').style.display = 'flex';
-  };
-}
+    if (!this._movePiece(0, 1)) {
+      // Can't move down → fix piece & maybe spawn next one
+      const spawn = this._fixCurrentPiece();
+      if (spawn) this._spawnPiece();
+    }
 
-function start() {
-  board = Board.createEmptyBoard(ROWS, COLS);
-  score = 100;
-  topScore = 100;
-  nextPiece = randPiece();
-  justSpawned = false;
-  discardCount = 0;
-  updateDiscardButtonText();
+    renderBoard(this.board, this.currentPiece);
+    renderNextPiece(this.nextPiece);
+  }
 
-  Render.initRenderer(ROWS, COLS);
+  _discardPiece() {
+    const penalty = this.rules.getDiscardPenalty(this.discardCount);
+    if (this.score < penalty) {
+      window.Modal ? Modal.show(MSG.notEnoughPoints) : alert(MSG.notEnoughPoints);
+      return;
+    }
 
-  /* ---- inyectar etiquetas desde messages.js ---- */
-  document.getElementById('scoreLabel').textContent = MSG.scoreLabel + ' ';
-  document.getElementById('topLabel').textContent   = MSG.topLabel + ' ';
-  document.getElementById('discardBtn').textContent = MSG.discardLabel;
-  document.getElementById('nextLabel').textContent = MSG.nextLabel;
+    this.score -= penalty;
+    this.discardCount++;
+    this._updateDiscardButtonLabel();
+    renderScore(this.score, this.topScore);
 
-  document.addEventListener('keydown', key);
-  document.getElementById('discardBtn').addEventListener('click', discard);
+    // Simplemente lanzamos la siguiente pieza
+    this._spawnPiece();
+    renderBoard(this.board, this.currentPiece);
+    renderNextPiece(this.nextPiece);
+  }
 
-  spawnPiece();
-  gravityId = setInterval(tick, 500);
-}
-
-/* ---------- NEW helper ---------- */
-function handleInvalidMove(y, x){
-  pauseGame();                          // stop gravity
-
-  if (score >= 50){
-    score -= 50;                        // A.1
-    board[y][x] = Board.createEmptyCell();  // A.2  remove bad piece
-    Render.render(board, nextPiece, score, topScore);
-
-    // A.3  show banner, resume on click
-    Modal.show(MSG.mistakeMinus50, () => {
-      spawnPiece();                     // continue with next piece
-      resumeGame();
+  _bindControls() {
+    window.addEventListener('keydown', (e) => {
+      if (this.gameOver) return;
+      let changed = false;
+      switch (e.key) {
+        case 'ArrowLeft':
+          changed = this._movePiece(-1, 0);
+          break;
+        case 'ArrowRight':
+          changed = this._movePiece(1, 0);
+          break;
+        case 'ArrowDown':
+          changed = this._movePiece(0, 1);
+          break;
+        case ' ':
+        case 'Spacebar':
+        case 'Space':
+          while (this._movePiece(0, 1)) {}
+          changed = true;
+          break;
+        default:
+          break;
+      }
+      // Tecla X para descartar pieza
+      if (!changed && (e.key === 'x' || e.key === 'X')) {
+        this._discardPiece();
+        changed = true;
+      }
+      if (changed) {
+        renderBoard(this.board, this.currentPiece);
+      }
     });
-  }else{
-    score = 0;                          // B.1
-    Render.render(board, nextPiece, score, topScore);
-    gameOver();                         // B.2  normal Game Over popup
+  }
+
+  _endGame() {
+    this.gameOver = true;
+    _pauseLoop(this);
+
+    /* ─── Añade puntuación al ranking ─── */
+    if (window.saveScore && window.playerName) {
+      window.saveScore(window.playerName, this.topScore);
+    }
+
+    // Mostrar popup Game Over con opciones
+    if (window.Modal && window.MSG) {
+      const html = `
+        <p class="modalText">${MSG.gameOver}</p>
+        <button id="btnAgain" class="modalBtn arcadeBtn" aria-label="Play again">${MSG.playAgain}</button>
+        <button id="btnMenu" class="modalBtn arcadeBtn" aria-label="Main menu">${MSG.mainMenu}</button>`;
+      Modal.showHtml(html);
+
+      const btnAgain = document.getElementById('btnAgain');
+      const btnMenu  = document.getElementById('btnMenu');
+
+      btnAgain.onclick = () => {
+        Modal.hide();
+        this._resetGame();
+      };
+      btnMenu.onclick = () => {
+        Modal.hide();
+        const welcome = document.getElementById('welcomeScreen');
+        const gameUI  = document.getElementById('gameUI');
+        welcome.classList.remove('hidden');
+        gameUI.classList.add('hidden');
+        /* Refresca el TOP-10 visible */
+        window.renderLeaderboard && window.renderLeaderboard();
+      };
+
+      /* Establecer foco inicial en botón Again para accesibilidad */
+      btnAgain.focus();
+    } else {
+      // Fallback simple
+      alert('GAME OVER');
+    }
+  }
+
+  /* Reinicia la partida sin perder el récord */
+  _resetGame() {
+    this.board = createEmptyBoard(this.rows, this.cols);
+    this.score = 100;
+    /* NO reiniciamos this.topScore: se conserva */
+    this.discardCount = 0;
+    this.gameOver = false;
+
+    // Reinicia renderer
+    renderScore(this.score, this.topScore);
+    renderBoard(this.board, null);
+    this._updateDiscardButtonLabel();
+
+    // Generar nueva pieza
+    this.currentPiece = null;
+    this.nextPiece = this._randomPiece();
+    this._spawnPiece();
+
+    // Reactivar loop
+    _resumeLoop(this);
+  }
+
+  /* ─── Helpers para puntuación ─── */
+  _updateTopScore() {
+    if (this.score > this.topScore) {
+      this.topScore = this.score;
+      renderScore(this.score, this.topScore);
+    }
+  }
+
+  _updateDiscardButtonLabel() {
+    const discardBtn = document.getElementById('discard-btn');
+    if (discardBtn) {
+      const penalty = this.rules.getDiscardPenalty(this.discardCount);
+      discardBtn.textContent = `Discard (-${penalty} pts)`;
+    }
+  }
+
+  /* Permite detener completamente la partida desde fuera */
+  terminate() {
+    this.gameOver = true;
+    if (this.loop) {
+      clearInterval(this.loop);
+      this.loop = null;
+    }
   }
 }
 
-/* ───  NEW GLOBAL  ───────────────────────────────── */
-let playerName = '';     // filled from start screen
-
-/* ───  WELCOME-SCREEN HANDLERS  ───────────────────── */
-function initWelcome(){
-  const input  = document.getElementById('playerName');
-  const start  = document.getElementById('startBtn');
-
-  input.addEventListener('input', () => {
-    input.value = input.value.replace(/[^A-Za-z0-9 ]/g, '');
-    start.disabled = !input.value.trim();
-  });
-
-  start.addEventListener('click', () => {
-    playerName = input.value.trim().slice(0, 15);   // hard cap
-    document.getElementById('welcomeScreen').style.display = 'none';
-    Game.start();                // begin the game
-  });
-
-  renderLeaderboard();           // show top-10 immediately
-}
-window.addEventListener('DOMContentLoaded', initWelcome);
-
-/* ───  LEADERBOARD UTILITIES  ─────────────────────── */
-const LS_KEY = 'tetrismineScores';
-
-function getScores(){
-  return JSON.parse(localStorage.getItem(LS_KEY)||'[]');
-}
-function saveScores(arr){
-  localStorage.setItem(LS_KEY, JSON.stringify(arr));
-}
-function renderLeaderboard(){
-  const list = document.getElementById('leaderboard');
-  const scores = getScores().slice(0,10);
-  list.innerHTML = scores.map(
-    s=>`<li>${s.name.padEnd(12,'&nbsp;')}  ${s.score}</li>`).join('');
-}
-
-function addScore(delta){
-  score += delta;
-  if (score > topScore) topScore = score;
-}
-
-/* helper: fully reset state without touching name / leaderboard */
-function resetGame(){
-  board     = Board.createEmptyBoard(ROWS, COLS);
-  score     = 100;
-  topScore  = 100;
-  nextPiece = randPiece();
-  justSpawned = false;
-  discardCount = 0;
-  updateDiscardButtonText();
-  Render.render(board, nextPiece, score, topScore);
-  gravityId = setInterval(tick, 500);
-}
-
-window.Game = { start };
-
-document.getElementById('logo').addEventListener('click', () => {
-  // Pausa el juego
-  pauseGame && pauseGame();
-  // Limpia el tablero y variables
-  if (typeof resetGame === 'function') resetGame();
-  // Limpia el nombre y desactiva el botón de start
-  document.getElementById('playerName').value = '';
-  document.getElementById('startBtn').disabled = true;
-  // Muestra la pantalla principal
-  document.getElementById('welcomeScreen').style.display = 'flex';
-  // Oculta el tablero
-  document.getElementById('gameScreen').style.display = 'none';
-});
+// Aplica las diferencias entre snapshot y board, restaurando celdas que cambiaron a bomba
+// pero mantiene otros cambios previos.
+function _rollbackToSnapshot(current, snapshot) {
+  for (let y = 0; y < current.length; y++) {
+    for (let x = 0; x < current[0].length; x++) {
+      const cur = current[y][x];
+      const snap = snapshot[y][x];
+      // Si la versión actual es bomba fija pero en snapshot no lo era,
+      // restauramos a snapshot.
+      if (cur.fixed && cur.value === 'B' && !(snap.fixed && snap.value === 'B')) {
+        current[y][x].value = snap.value;
+        current[y][x].fixed = snap.fixed;
+        current[y][x].possibleValues = new Set(snap.possibleValues);
+      }
+      // Si la celda era la que colocó el jugador, eliminamos su valor.
+      if (cur.justPlaced) {
+        current[y][x] = { ...snap };
+      }
+    }
+  }
+} 

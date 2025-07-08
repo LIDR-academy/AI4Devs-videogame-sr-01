@@ -1,8 +1,7 @@
-/* Minimal reusable centred modal */
 (function () {
   const overlay = document.createElement('div');
   overlay.id = 'modalOverlay';
-  overlay.innerHTML = '<div id="modalBox"></div>';   // <- box only
+  overlay.innerHTML = '<div id="modalBox"></div>';
   document.body.appendChild(overlay);
 
   const box = document.getElementById('modalBox');
@@ -11,14 +10,14 @@
     show(msg, cb) {
       box.innerHTML = `<span>${msg}</span>`;
       overlay.classList.add('visible');
-      overlay.onclick = () => { Modal.hide(); if(cb) cb(); };
+      overlay.onclick = () => { Modal.hide(); if (cb) cb(); };
     },
 
-    /* NEW: accept raw HTML and no auto-close */
-    showHtml(html){
+    // Permite HTML crudo y no auto-cierre
+    showHtml(html) {
       box.innerHTML = html;
       overlay.classList.add('visible');
-      overlay.onclick = null;          // ignore backdrop clicks
+      overlay.onclick = null;
     },
 
     hide() { overlay.classList.remove('visible'); }

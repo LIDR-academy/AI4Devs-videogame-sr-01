@@ -1,4 +1,3 @@
-/* Centralised user-facing strings – ready for future i18n */
 window.MSG = {
   scoreLabel      : 'Score:',
   topLabel        : 'Top score:',
@@ -9,5 +8,8 @@ window.MSG = {
   mainMenu        : 'MAIN MENU',
   notEnoughPoints : 'You dont have enough points to discard.',
   invalidMove     : 'Impossible move under Minesweeper rules!',
-  mistakeMinus50  : 'Mistake –50 points'
+  mistakeMinus50  : 'Mistake –50 points',
+  mistakeMinus100 : 'Mistake –100 points',
+  easyModeLabel   : 'Easy Mode',
+  hardModeLabel   : 'Hardcore Mode'
 }; 
