@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crowns Puzzle</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>Crowns Puzzle</h1>
+      <div class="game-info">
+        <p>Place one crown in each row, column, and colored region.</p>
+        <p>Crowns cannot touch each other, not even diagonally.</p>
+      </div>
+
+      <div id="game-board" class="game-board"></div>
+
+      <div class="controls">
+        <button id="undo-btn" class="btn">Undo</button>
+        <button id="reset-btn" class="btn">Reset</button>
+      </div>
+
+      <div id="message" class="message"></div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
