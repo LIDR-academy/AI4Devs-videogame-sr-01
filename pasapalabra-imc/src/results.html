@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultados • Rosco HTML5</title>
+
+<!-- Fuente digital para coherencia con el cronómetro -->
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+
+<style>
+  /* ======  Variables de estilo  ====== */
+  :root{
+    --azul       : #0a67e3;
+    --azul-neon  : #29a3ff;
+    --azul-osc   : #0b1c3b;
+    --negro      : #111722;
+    --gris-panel : #1d2634;
+    --blanco     : #fff;
+    --verde      : #16c172;
+    --naranja    : #eb7f00;
+    --morado     : #a24ad7;
+    --rojo       : #e14c4c;
+    --radius     : .8rem;
+    --sombra     : 0 4px 10px rgba(0,0,0,.35);
+  }
+
+  /* ======  Reset y layout base  ====== */
+  *{box-sizing:border-box;}
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--negro);
+    color:var(--blanco);
+    font-family:Arial,Helvetica,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:1rem;
+  }
+
+  /* ======  Contenedor principal  ====== */
+  .marco{
+    width:100%;
+    max-width:650px;
+    background:var(--gris-panel);
+    border:3px solid var(--azul-neon);
+    border-radius:var(--radius);
+    padding:2rem 1.8rem 3rem;
+    box-shadow:var(--sombra);
+    display:flex;
+    flex-direction:column;
+    gap:2rem;
+  }
+
+  /* ======  Titular & nombre de jugador  ====== */
+  h1{
+    margin:0;
+    font-size:clamp(1.9rem,5vw,2.6rem);
+    text-align:center;
+    background:linear-gradient(90deg,#28f067,#29a3ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .jugador{
+    text-align:center;
+    font-weight:600;
+    font-size:1.1rem;
+    letter-spacing:.5px;
+  }
+
+  /* ======  Tarjetas de stats  ====== */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:1rem;
+  }
+  .stat{
+    background:var(--azul-osc);
+    border:2px solid rgba(255,255,255,.07);
+    border-radius:var(--radius);
+    padding:1.2rem .6rem .9rem;
+    text-align:center;
+    box-shadow:inset 0 0 12px rgba(0,0,0,.4);
+    display:flex;
+    flex-direction:column;
+    gap:.25rem;
+  }
+  .stat-icon{
+    font-size:1.7rem;
+    line-height:1;
+  }
+  .stat-num{
+    font-size:clamp(1.4rem,4vw,1.9rem);
+    font-weight:700;
+    font-family:'Share Tech Mono',monospace;
+  }
+  .stat-label{
+    font-size:.75rem;
+    letter-spacing:1px;
+    opacity:.9;
+  }
+
+  /* Colores específicos */
+  .aciertos .stat-icon{color:var(--verde);}
+  .fallos   .stat-icon{color:var(--rojo);}
+  .puntos   .stat-icon{color:#e5c02f;}
+  .tiempo   .stat-icon{color:var(--morado);}
+
+  /* ======  Tabla ranking  ====== */
+  .tabla-wrapper{
+    display:flex;
+    flex-direction:column;
+    gap:.8rem;
+  }
+  .tabla-title{
+    font-size:1.25rem;
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    color:var(--azul-neon);
+    font-weight:700;
+  }
+  .tabla-title svg{width:1.2em;height:1.2em;fill:currentColor;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.95rem;
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  thead tr{
+    background:#22324d;
+    color:#9dc1ff;
+    text-align:left;
+    font-size:.8rem;
+    letter-spacing:.5px;
+  }
+  th,td{padding:.7rem .9rem;}
+  tbody tr:nth-child(odd){background:#272f3f;}
+  tbody tr:nth-child(even){background:#303d4f;}
+  tbody tr:hover{background:#394b66;}
+
+  /* ======  Botón jugar de nuevo  ====== */
+  .boton{
+    align-self:center;
+    margin-top:1rem;
+    padding:.8rem 2.2rem;
+    font-size:1rem;
+    font-weight:600;
+    color:var(--blanco);
+    background:linear-gradient(180deg,var(--azul-neon),var(--azul));
+    border:none;
+    border-radius:var(--radius);
+    box-shadow:var(--sombra);
+    cursor:pointer;
+    transition:transform .13s;
+  }
+  .boton:active{transform:scale(.97);}
+</style>
+</head>
+<body>
+
+<div class="marco">
+
+  <!-- Título & jugador -->
+  <h1>¡Fin de la Partida!</h1>
+  <div class="jugador" id="jugador">Jugador</div>
+
+  <!-- Tarjetas con estadísticas -->
+  <div class="stats">
+    <div class="stat aciertos">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-num" id="aciertos">0</div>
+      <div class="stat-label">ACIERTOS</div>
+    </div>
+
+    <div class="stat fallos">
+      <div class="stat-icon">❌</div>
+      <div class="stat-num" id="fallos">0</div>
+      <div class="stat-label">FALLOS</div>
+    </div>
+
+    <div class="stat puntos">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-num" id="puntos">0</div>
+      <div class="stat-label">PUNTUACIÓN</div>
+    </div>
+
+    <div class="stat tiempo">
+      <div class="stat-icon">⏰</div>
+      <div class="stat-num" id="tiempo">00:00</div>
+      <div class="stat-label">TIEMPO RESTANTE</div>
+    </div>
+  </div>
+
+  <!-- Ranking -->
+  <div class="tabla-wrapper">
+    <div class="tabla-title">
+      <!-- Trofeo SVG -->
+      <svg viewBox="0 0 24 24"><path d="M17 3h-2V1h-6v2H7C5.346 3 4 4.346 4 6v3c0 3.336 2.624 6.091 6 6.499V18H8v2h8v-2h-2v-2.501c3.376-.408 6-3.163 6-6.499V6c0-1.654-1.346-3-3-3zm1 6c0 2.414-1.721 4.434-4 4.899V5h3c.552 0 1 .449 1 1v3zM7 5h3v8.899C7.721 13.434 6 11.414 6 9V6c0-.551.448-1 1-1z"/></svg>
+      Top 10 Jugadores
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:4rem">POS</th>
+          <th>JUGADOR</th>
+          <th style="width:6rem">PUNTOS</th>
+          <th style="width:7rem">FECHA</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-ranking">
+        <!-- Filas de ejemplo -->
+        <tr><td>1</td><td>Jugador</td><td>0</td><td>09/07/2025</td></tr>
+        <tr><td>2</td><td>Jugador</td><td>0</td><td>09/07/2025</td></tr>
+        <tr><td>3</td><td>Jugador</td><td>0</td><td>09/07/2025</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botón reinicio -->
+  <button id="playAgainBtn" class="boton">Jugar de Nuevo</button>
+
+</div>
+
+<!-- Script de resultados -->
+<script type="module" src="js/results.js"></script>
+
+</body>
+</html>

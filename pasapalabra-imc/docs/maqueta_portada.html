@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pasapalabra • El Rosco</title>
+
+<!-- Fuente monoespaciada usada en las demás pantallas -->
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+  /* ---------- Variables de color y tamaño ---------- */
+  :root{
+    --azul       : #0a67e3;
+    --azul-neon  : #29a3ff;
+    --negro      : #111722;
+    --naranja1   : #b86a00;
+    --naranja2   : #ff6b22;
+    --blanco     : #ffffff;
+    --radius     : 1.2rem;
+    --sombra     : 0 4px 12px rgba(0,0,0,.4);
+  }
+
+  /* ---------- Reset y layout base ---------- */
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    height:100%;
+    background:var(--negro);
+    color:var(--blanco);
+    font-family:Arial,Helvetica,sans-serif;
+  }
+
+  /* Fondo punteado muy sutil para dar textura */
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background-image:
+      radial-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      radial-gradient(rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size:50px 50px,25px 25px;
+    pointer-events:none;
+  }
+
+  /* Contenedor principal centrado */
+  .wrapper{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:2.4rem;
+    padding:1.5rem;
+    text-align:center;
+  }
+
+  /* Título principal con gradiente naranja-rojo */
+  h1{
+    font-size:clamp(2.4rem,8vw,4rem);
+    font-weight:900;
+    letter-spacing:3px;
+    background:linear-gradient(90deg,var(--naranja1),var(--naranja2));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-transform:uppercase;
+  }
+
+  /* Subtítulo fino */
+  h2{
+    font-size:clamp(1rem,3.5vw,1.3rem);
+    font-weight:500;
+    letter-spacing:4px;
+    color:#b9c7e2;
+    text-transform:uppercase;
+  }
+
+  /* Párrafos de introducción */
+  .intro{
+    max-width:480px;
+    display:flex;
+    flex-direction:column;
+    gap:.9rem;
+    font-size:clamp(.9rem,3vw,1.1rem);
+    line-height:1.45;
+  }
+
+  /* ---------- Campo nombre de jugador ---------- */
+  .input-nombre{
+    width:100%;
+    max-width:320px;
+    margin-top:.8rem;
+    padding:.9rem 1.2rem;
+    border:2px solid var(--azul-neon);
+    border-radius:var(--radius);
+    background:#1b2638;
+    color:var(--blanco);
+    font-size:1rem;
+    outline:none;
+    box-shadow:var(--sombra);
+  }
+  .input-nombre::placeholder{color:#8da0b8;}
+
+  /* ---------- Botón de inicio ---------- */
+  .boton{
+    margin-top:1.6rem;
+    padding:1rem 2.8rem;
+    font-size:clamp(1rem,3.5vw,1.2rem);
+    font-weight:700;
+    color:var(--blanco);
+    background:linear-gradient(180deg,var(--azul-neon),var(--azul));
+    border:none;
+    border-radius:var(--radius);
+    box-shadow:var(--sombra);
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:.6rem;
+    transition:transform .15s, box-shadow .15s;
+    animation:float 3s ease-in-out infinite;
+  }
+  .boton:active{
+    transform:scale(.97);
+    box-shadow:0 2px 5px rgba(0,0,0,.5);
+  }
+
+  .boton svg{width:1.4em;height:1.4em;fill:currentColor;}
+
+  /* Animación flotante suave */
+  @keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%   {transform:translateY(-6px);}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <!-- Encabezados -->
+  <h1>PASAPALABRA</h1>
+  <h2>EL ROSCO</h2>
+
+  <!-- Texto introductorio -->
+  <div class="intro">
+    <p>¡Completa el rosco antes de que se agote el tiempo!</p>
+    <p>27 letras, 2 minutos. ¿Te atreves?</p>
+  </div>
+
+  <!-- Input del nombre -->
+  <input type="text" class="input-nombre" placeholder="Introduce tu nombre...">
+
+  <!-- Botón principal (sin funcionalidad JavaScript) -->
+  <button class="boton">
+    ¡Empezar a jugar!
+    <!-- Icono de gamepad -->
+    <svg viewBox="0 0 24 24"><path d="M6 8.5C4.07 8.5 2.5 10.07 2.5 12S4.07 15.5 6 15.5h1.293l1.853 1.853a.5.5 0 0 0 .854-.353V14h6v2.999a.5.5 0 0 0 .854.353L16.707 15.5H18c1.93 0 3.5-1.57 3.5-3.5S19.93 8.5 18 8.5H6Zm1.75 2.25h1.5v1.5h-1.5v1.5h-1.5v-1.5h-1.5v-1.5h1.5v-1.5h1.5v1.5Zm8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm2 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/></svg>
+  </button>
+</div>
+
+</body>
+</html>
