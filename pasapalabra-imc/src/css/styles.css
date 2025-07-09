@@ -1,0 +1,58 @@
+/* styles.css
+ * Hoja de estilos global para Pasapalabra · El Rosco
+ * TODO: Extraer estilos comunes de las maquetas y unificarlos aquí.
+ */ 
+
+/* ========= Variables globales ========= */
+:root{
+  --max-size   : 600px;      /* Ancho máximo para rosco y panel pregunta  */
+
+  /* Paleta principal */
+  --azul       : #0a67e3;
+  --azul-neon  : #29a3ff;
+  --azul-claro : #29a3ff;    /* Alias para coherencia */
+  --azul-osc   : #0b1c3b;
+
+  --negro      : #111722;
+  --gris       : #1d2634;
+  --gris-panel : #1d2634;
+
+  --blanco     : #ffffff;
+
+  --verde      : #16c172;
+  --naranja    : #eb7f00;
+  --naranja1   : #b86a00;
+  --naranja2   : #ff6b22;
+  --morado     : #a24ad7;
+  --rojo       : #e14c4c;
+
+  /* Otros */
+  --radius     : 0.8rem;
+  --sombra     : 0 4px 12px rgba(0,0,0,.4);
+  --color-neutral:#3498db;
+  --color-pending:#e67e22;
+  --color-hit:#2ecc71;
+  --color-fail:#e74c3c;
+}
+
+/* ========= Reset básico ========= */
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{
+  height:100%;
+  background:var(--negro);
+  color:var(--blanco);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+/* ========= Utilidades globales ========= */
+body::before{
+  /* Textura de puntos de fondo, heredada de la portada */
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    radial-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    radial-gradient(rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size:50px 50px,25px 25px;
+  pointer-events:none;
+  z-index:-1;
+} 

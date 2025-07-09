@@ -1,0 +1,273 @@
+[
+    {
+      "letter": "A",
+      "clues": [
+        { "question": "Empieza por A: Ave grande que no vuela y es símbolo de Australia.", "answer": "avestruz" },
+        { "question": "Empieza por A: Fruto seco muy usado en turrones y mazapanes.", "answer": "almendra" },
+        { "question": "Empieza por A: Color primario que se asocia al cielo despejado.", "answer": "azul" },
+        { "question": "Empieza por A: Madre del padre o de la madre.", "answer": "abuela" },
+        { "question": "Empieza por A: Mamífero conocido por sus largas orejas y rebuznos.", "answer": "asno" }
+      ]
+    },
+    {
+      "letter": "B",
+      "clues": [
+        { "question": "Empieza por B: Mamífero marino gigante que expulsa chorros de agua.", "answer": "ballena" },
+        { "question": "Empieza por B: Embarcación grande destinada a navegar por el mar.", "answer": "barco" },
+        { "question": "Empieza por B: Verdura morada con la que se prepara la musaca.", "answer": "berenjena" },
+        { "question": "Empieza por B: Postre esponjoso hecho con harina, huevos y azúcar.", "answer": "bizcocho" },
+        { "question": "Empieza por B: Mujer con poderes mágicos, típica de los cuentos de hadas.", "answer": "bruja" }
+      ]
+    },
+    {
+      "letter": "C",
+      "clues": [
+        { "question": "Empieza por C: Mamífero doméstico famoso por relinchar.", "answer": "caballo" },
+        { "question": "Empieza por C: Fruta pequeña y roja que suele llevar rabo.", "answer": "cereza" },
+        { "question": "Empieza por C: Utensilio que se usa para comer sopa.", "answer": "cuchara" },
+        { "question": "Empieza por C: Ciudad andaluza famosa por su carnaval y su Catedral de Santa Cruz.", "answer": "Cádiz" },
+        { "question": "Empieza por C: Bebida caliente que se obtiene del grano tostado del cafeto.", "answer": "café" }
+      ]
+    },
+    {
+      "letter": "D",
+      "clues": [
+        { "question": "Empieza por D: Mamífero marino conocido por su inteligencia y sonrisa.", "answer": "delfín" },
+        { "question": "Empieza por D: Piedra preciosa de gran dureza y brillo.", "answer": "diamante" },
+        { "question": "Empieza por D: Pieza ósea situada en la boca, usada para masticar.", "answer": "diente" },
+        { "question": "Empieza por D: Acción de descansar con los ojos cerrados durante la noche.", "answer": "dormir" },
+        { "question": "Empieza por D: Criatura mitológica que escupe fuego en muchos cuentos.", "answer": "dragón" }
+      ]
+    },
+    {
+      "letter": "E",
+      "clues": [
+        { "question": "Empieza por E: Mamífero terrestre de gran tamaño con larga trompa.", "answer": "elefante" },
+        { "question": "Empieza por E: Lugar o centro donde los niños aprenden durante la infancia.", "answer": "escuela" },
+        { "question": "Empieza por E: País europeo cuya capital es Madrid.", "answer": "España" },
+        { "question": "Empieza por E: Cuerpo celeste que brilla con luz propia en el cielo.", "answer": "estrella" },
+        { "question": "Empieza por E: Animal cubierto de púas que se enrolla para defenderse.", "answer": "erizo" }
+      ]
+    },
+    {
+      "letter": "F",
+      "clues": [
+        { "question": "Empieza por F: Mamífero marino que 'aplaude' con sus aletas.", "answer": "foca" },
+        { "question": "Empieza por F: Deporte que se juega con un balón y dos porterías.", "answer": "fútbol" },
+        { "question": "Empieza por F: Fruta roja, dulce y aromática con semillas en la superficie.", "answer": "fresa" },
+        { "question": "Empieza por F: País europeo cuya capital es París.", "answer": "Francia" },
+        { "question": "Empieza por F: Elemento que arde, desprendiendo luz y calor.", "answer": "fuego" }
+      ]
+    },
+    {
+      "letter": "G",
+      "clues": [
+        { "question": "Empieza por G: Pequeño felino doméstico que maúlla.", "answer": "gato" },
+        { "question": "Empieza por G: Instrumento musical de seis cuerdas que se puntean.", "answer": "guitarra" },
+        { "question": "Empieza por G: Conjunto de miles de millones de estrellas, como la Vía Láctea.", "answer": "galaxia" },
+        { "question": "Empieza por G: Unidad que se anota al marcar en fútbol.", "answer": "gol" },
+        { "question": "Empieza por G: País europeo conocido por sus islas y monumentos antiguos.", "answer": "Grecia" }
+      ]
+    },
+    {
+      "letter": "H",
+      "clues": [
+        { "question": "Empieza por H: Herramienta con mango y filo usada para cortar madera.", "answer": "hacha" },
+        { "question": "Empieza por H: Estado sólido del agua a baja temperatura.", "answer": "hielo" },
+        { "question": "Empieza por H: Edificio que ofrece alojamiento a viajeros.", "answer": "hotel" },
+        { "question": "Empieza por H: Pequeño roedor que a menudo se tiene como mascota.", "answer": "hámster" },
+        { "question": "Empieza por H: Ciencia que estudia los hechos del pasado.", "answer": "historia" }
+      ]
+    },
+    {
+      "letter": "I",
+      "clues": [
+        { "question": "Empieza por I: Extensión de tierra rodeada de agua por todas partes.", "answer": "isla" },
+        { "question": "Empieza por I: Reptil tropical de color verde que a veces se domestica.", "answer": "iguana" },
+        { "question": "Empieza por I: Estación del año más fría, con nieve y hielo.", "answer": "invierno" },
+        { "question": "Empieza por I: País europeo cuya capital es Roma.", "answer": "Italia" },
+        { "question": "Empieza por I: Animal pequeño con seis patas y exoesqueleto, como la hormiga.", "answer": "insecto" }
+      ]
+    },
+    {
+      "letter": "J",
+      "clues": [
+        { "question": "Empieza por J: Mamífero africano de largo cuello y manchas.", "answer": "jirafa" },
+        { "question": "Empieza por J: Área de una casa donde se cultivan flores y plantas.", "answer": "jardín" },
+        { "question": "Empieza por J: Alimento curado y salado típico de España, hecho de cerdo.", "answer": "jamón" },
+        { "question": "Empieza por J: Séptimo mes del año.", "answer": "julio" },
+        { "question": "Empieza por J: País asiático conocido por el sushi y el monte Fuji.", "answer": "Japón" }
+      ]
+    },
+    {
+      "letter": "K",
+      "clues": [
+        { "question": "Empieza por K: Mamífero australiano que se alimenta de hojas de eucalipto.", "answer": "koala" },
+        { "question": "Empieza por K: Ropa tradicional japonesa parecida a una bata.", "answer": "kimono" },
+        { "question": "Empieza por K: Unidad básica de masa del Sistema Internacional.", "answer": "kilogramo" },
+        { "question": "Empieza por K: Arte marcial originaria de Okinawa.", "answer": "karate" },
+        { "question": "Empieza por K: Puesto pequeño donde se venden periódicos y golosinas.", "answer": "kiosco" }
+      ]
+    },
+    {
+      "letter": "L",
+      "clues": [
+        { "question": "Empieza por L: Mamífero felino conocido como el rey de la selva.", "answer": "león" },
+        { "question": "Empieza por L: Bebida blanca que se obtiene de la vaca.", "answer": "leche" },
+        { "question": "Empieza por L: Instrumento de grafito que se usa para escribir o dibujar.", "answer": "lápiz" },
+        { "question": "Empieza por L: Satélite natural de la Tierra.", "answer": "luna" },
+        { "question": "Empieza por L: Fruta cítrica verde, más pequeña que el limón.", "answer": "lima" }
+      ]
+    },
+    {
+      "letter": "M",
+      "clues": [
+        { "question": "Empieza por M: Mueble con patas sobre el que se come o trabaja.", "answer": "mesa" },
+        { "question": "Empieza por M: Capital de España.", "answer": "Madrid" },
+        { "question": "Empieza por M: Primate que se balancea entre los árboles.", "answer": "mono" },
+        { "question": "Empieza por M: Producto lácteo untuoso que se obtiene batiendo nata.", "answer": "mantequilla" },
+        { "question": "Empieza por M: Arte de combinar sonidos y silencios de manera agradable al oído.", "answer": "música" }
+      ]
+    },
+    {
+      "letter": "N",
+      "clues": [
+        { "question": "Empieza por N: Fruto cítrico de color anaranjado.", "answer": "naranja" },
+        { "question": "Empieza por N: Masa visible de gotas de agua suspendidas en el aire.", "answer": "nube" },
+        { "question": "Empieza por N: Construcción que sirve de hogar a las aves.", "answer": "nido" },
+        { "question": "Empieza por N: Chico o chica de corta edad.", "answer": "niño" },
+        { "question": "Empieza por N: Vehículo espacial diseñado para viajar fuera de la atmósfera.", "answer": "nave" }
+      ]
+    },
+    {
+      "letter": "Ñ",
+      "clues": [
+        { "question": "Empieza por Ñ: Ave corredora sudamericana parecida al avestruz.", "answer": "ñandú" },
+        { "question": "Empieza por Ñ: Antílope africano que migra en grandes manadas por la sabana.", "answer": "ñu" },
+        { "question": "Empieza por Ñ: Pasta italiana de patata que se come los días 29 en Argentina.", "answer": "ñoqui" },
+        { "question": "Empieza por Ñ: Pimiento rojo seco, típico de la cocina murciana.", "answer": "ñora" },
+        { "question": "Empieza por Ñ: Adjetivo que describe a alguien demasiado tímido o apocado.", "answer": "ñoño" }
+      ]
+    },
+    {
+      "letter": "O",
+      "clues": [
+        { "question": "Empieza por O: Mamífero plantígrado que hiberna durante el invierno.", "answer": "oso" },
+        { "question": "Empieza por O: Masa de agua salada que cubre la mayor parte de la Tierra.", "answer": "océano" },
+        { "question": "Empieza por O: Fruto del olivo del que se extrae aceite.", "answer": "oliva" },
+        { "question": "Empieza por O: Décimo mes del año.", "answer": "octubre" },
+        { "question": "Empieza por O: Parte del cuerpo situada a ambos lados de la cabeza que sirve para oír.", "answer": "oreja" }
+      ]
+    },
+    {
+      "letter": "P",
+      "clues": [
+        { "question": "Empieza por P: Animal doméstico que ladra y mueve la cola.", "answer": "perro" },
+        { "question": "Empieza por P: Fruta tropical con corona de hojas y pulpa amarilla.", "answer": "piña" },
+        { "question": "Empieza por P: Objeto esférico que se utiliza para jugar al fútbol o baloncesto.", "answer": "pelota" },
+        { "question": "Empieza por P: Capital de Francia.", "answer": "París" },
+        { "question": "Empieza por P: Vehículo ligero de dos ruedas que se impulsa con un pie en el suelo.", "answer": "patinete" }
+      ]
+    },
+    {
+      "letter": "Q",
+      "clues": [
+        { "question": "Empieza por Q: Alimento lácteo sólido que se hace cuajando la leche.", "answer": "queso" },
+        { "question": "Empieza por Q: Ciencia que estudia la composición de la materia.", "answer": "química" },
+        { "question": "Empieza por Q: Hidalgo manchego, protagonista de la novela de Cervantes.", "answer": "Quijote" },
+        { "question": "Empieza por Q: Número ordinal que ocupa el puesto número cinco.", "answer": "quinto" },
+        { "question": "Empieza por Q: Ave de plumaje verde y cola larga, símbolo de Guatemala.", "answer": "quetzal" }
+      ]
+    },
+    {
+      "letter": "R",
+      "clues": [
+        { "question": "Empieza por R: Pequeño roedor que también da nombre a un dispositivo de ordenador.", "answer": "ratón" },
+        { "question": "Empieza por R: Corriente natural de agua que desemboca en el mar.", "answer": "río" },
+        { "question": "Empieza por R: Ciudad italiana famosa por el Coliseo y la Fontana di Trevi.", "answer": "Roma" },
+        { "question": "Empieza por R: Color que tienen los tomates maduros.", "answer": "rojo" },
+        { "question": "Empieza por R: Masa sólida de minerales que forma parte de la corteza terrestre.", "answer": "roca" }
+      ]
+    },
+    {
+      "letter": "S",
+      "clues": [
+        { "question": "Empieza por S: Estrella alrededor de la cual gira la Tierra.", "answer": "sol" },
+        { "question": "Empieza por S: Reptil alargado que se desplaza sin patas.", "answer": "serpiente" },
+        { "question": "Empieza por S: Mueble de cuatro patas con respaldo para sentarse.", "answer": "silla" },
+        { "question": "Empieza por S: Fruta grande, verde por fuera y roja por dentro, muy refrescante en verano.", "answer": "sandía" },
+        { "question": "Empieza por S: Ciudad andaluza famosa por su Giralda y su Feria de Abril.", "answer": "Sevilla" }
+      ]
+    },
+    {
+      "letter": "T",
+      "clues": [
+        { "question": "Empieza por T: Felino grande de rayas negras y anaranjadas.", "answer": "tigre" },
+        { "question": "Empieza por T: Fruto rojo que se usa en ensaladas y salsas.", "answer": "tomate" },
+        { "question": "Empieza por T: Medio de transporte que circula sobre raíles.", "answer": "tren" },
+        { "question": "Empieza por T: Recipiente con asa que se usa para beber café o té.", "answer": "taza" },
+        { "question": "Empieza por T: Capital de Japón.", "answer": "Tokio" }
+      ]
+    },
+    {
+      "letter": "U",
+      "clues": [
+        { "question": "Empieza por U: Fruta pequeña que crece en racimos y sirve para hacer vino.", "answer": "uva" },
+        { "question": "Empieza por U: Animal mitológico representado como un caballo con un cuerno.", "answer": "unicornio" },
+        { "question": "Empieza por U: Institución de educación superior donde se obtienen grados.", "answer": "universidad" },
+        { "question": "Empieza por U: País sudamericano cuya capital es Montevideo.", "answer": "Uruguay" },
+        { "question": "Empieza por U: Objeto que se emplea para realizar una tarea, como una cuchara o un martillo.", "answer": "utensilio" }
+      ]
+    },
+    {
+      "letter": "V",
+      "clues": [
+        { "question": "Empieza por V: Mamífero bovino que produce leche.", "answer": "vaca" },
+        { "question": "Empieza por V: Abertura en la pared que deja pasar la luz y el aire.", "answer": "ventana" },
+        { "question": "Empieza por V: Fenómeno geológico por donde sale lava al exterior.", "answer": "volcán" },
+        { "question": "Empieza por V: Color que resulta de mezclar azul y amarillo.", "answer": "verde" },
+        { "question": "Empieza por V: Ciudad española famosa por las Fallas.", "answer": "Valencia" }
+      ]
+    },
+    {
+      "letter": "W",
+      "clues": [
+        { "question": "Empieza por W: Red inalámbrica que permite conectar dispositivos a internet.", "answer": "wifi" },
+        { "question": "Empieza por W: Bebida alcohólica destilada de cereales, típica de Escocia.", "answer": "whisky" },
+        { "question": "Empieza por W: Deporte acuático en el que se navega sobre una tabla con vela.", "answer": "windsurf" },
+        { "question": "Empieza por W: Capital de Estados Unidos.", "answer": "Washington" },
+        { "question": "Empieza por W: Unidad de potencia del Sistema Internacional cuyo símbolo es esta misma letra.", "answer": "watt" }
+      ]
+    },
+    {
+      "letter": "X",
+      "clues": [
+        { "question": "Empieza por X: Instrumento musical de láminas que se percuten con baquetas.", "answer": "xilófono" },
+        { "question": "Empieza por X: Miedo u odio a los extranjeros.", "answer": "xenofobia" },
+        { "question": "Empieza por X: Elemento químico, gas noble cuyo símbolo es Xe.", "answer": "xenón" },
+        { "question": "Empieza por X: Insecto que se alimenta de madera, como las termitas.", "answer": "xilófago" },
+        { "question": "Empieza por X: Proceso de fotocopia en seco inventado por Chester Carlson.", "answer": "xerografía" }
+      ]
+    },
+    {
+      "letter": "Y",
+      "clues": [
+        { "question": "Empieza por Y: Juguete formado por un disco que sube y baja sujeto a una cuerda.", "answer": "yoyó" },
+        { "question": "Empieza por Y: Embarcación de recreo de tamaño mediano o grande.", "answer": "yate" },
+        { "question": "Empieza por Y: Producto lácteo fermentado que se come con cuchara.", "answer": "yogur" },
+        { "question": "Empieza por Y: Parte amarilla y central del huevo.", "answer": "yema" },
+        { "question": "Empieza por Y: País de Oriente Medio cuya capital es Saná.", "answer": "Yemen" }
+      ]
+    },
+    {
+      "letter": "Z",
+      "clues": [
+        { "question": "Empieza por Z: Prenda de vestir que cubre el pie y se lleva con calcetines.", "answer": "zapato" },
+        { "question": "Empieza por Z: Mamífero cánido salvaje de pelaje rojizo.", "answer": "zorro" },
+        { "question": "Empieza por Z: Hortaliza alargada y naranja que 'mejora la vista', según se dice.", "answer": "zanahoria" },
+        { "question": "Empieza por Z: Bebida que se obtiene exprimiendo frutas.", "answer": "zumo" },
+        { "question": "Empieza por Z: Ciudad aragonesa conocida por la Basílica del Pilar.", "answer": "Zaragoza" }
+      ]
+    }
+  ]
+  
