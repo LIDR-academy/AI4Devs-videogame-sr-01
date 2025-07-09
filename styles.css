@@ -380,45 +380,51 @@ body {
 /* Estilos para los desplegables */
 .feedback-container {
   margin-top: 15px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #444;
   padding-top: 15px;
 }
 
 .feedback-toggle {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 10px 15px;
+  background: linear-gradient(135deg, #f6de82 0%, #ffe55c 100%);
+  color: #1a1a1a;
+  border: 1px solid #f6de82;
+  padding: 12px 16px;
   margin-bottom: 8px;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: left;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .feedback-toggle:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: linear-gradient(135deg, #ffe55c 0%, #f6de82 100%);
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(246, 222, 130, 0.3);
+  border-color: #ffe55c;
 }
 
 .feedback-toggle.prompts {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #f6de82 0%, #ffdd33 100%);
+  border-color: #f6de82;
 }
 
 .feedback-toggle.prompts:hover {
-  background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+  background: linear-gradient(135deg, #ffdd33 0%, #f6de82 100%);
+  border-color: #ffdd33;
 }
 
 .feedback-toggle::after {
   content: "▼";
   font-size: 12px;
   transition: transform 0.3s ease;
+  color: #1a1a1a;
 }
 
 .feedback-toggle.active::after {
@@ -426,15 +432,16 @@ body {
 }
 
 .feedback-content {
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 15px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 16px;
   margin-bottom: 10px;
   font-size: 14px;
   line-height: 1.6;
   display: none;
   animation: fadeIn 0.3s ease;
+  color: #e0e0e0;
 }
 
 .feedback-content.active {
@@ -442,21 +449,21 @@ body {
 }
 
 .feedback-content h4 {
-  margin: 0 0 10px 0;
-  color: #333;
+  margin: 0 0 12px 0;
+  color: #f6de82;
   font-size: 16px;
 }
 
 .feedback-content h5 {
-  margin: 15px 0 8px 0;
-  color: #444;
+  margin: 16px 0 8px 0;
+  color: #f6de82;
   font-size: 14px;
   font-weight: 600;
 }
 
 .feedback-content p {
   margin: 8px 0;
-  color: #555;
+  color: #e0e0e0;
 }
 
 .feedback-content ul {
@@ -466,28 +473,28 @@ body {
 
 .feedback-content li {
   margin: 4px 0;
-  color: #555;
+  color: #e0e0e0;
 }
 
 .rating {
   font-weight: bold;
-  color: #667eea;
+  color: #f6de82;
 }
 
 .rating.excellent {
-  color: #28a745;
+  color: #4caf50;
 }
 
 .rating.good {
-  color: #17a2b8;
+  color: #2196f3;
 }
 
 .rating.fair {
-  color: #ffc107;
+  color: #ff9800;
 }
 
 .rating.poor {
-  color: #dc3545;
+  color: #f44336;
 }
 
 @keyframes fadeIn {
