@@ -2,8 +2,16 @@ class Grid {
   constructor(width, height) {
     this.width = width;
     this.height = height;
-    this.cells = this.createEmptyGrid();
+    this._cells = this.createEmptyGrid();
     this.previousCells = this.createEmptyGrid();
+  }
+
+  get cells() {
+    return this._cells;
+  }
+
+  set cells(newCells) {
+    this._cells = newCells;
   }
 
   createEmptyGrid() {
@@ -36,11 +44,14 @@ class Grid {
     if (row < 0 || row >= this.height || col < 0 || col >= this.width) {
       return 0;
     }
-    return this.cells[row][col];
+    const value = this.cells[row][col];
+
+    return value;
   }
 
   setCell(row, col, value) {
     if (row >= 0 && row < this.height && col >= 0 && col < this.width) {
+      const oldValue = this.cells[row][col];
       this.cells[row][col] = value ? 1 : 0;
     }
   }

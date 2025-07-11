@@ -1,4 +1,12 @@
 const PATTERNS = {
+  single: {
+    name: "Single Cell",
+    description: "A single cell - basic building block",
+    pattern: [
+      [1]
+    ]
+  },
+
   glider: {
     name: "Glider",
     description: "A small spaceship that moves diagonally",

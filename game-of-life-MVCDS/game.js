@@ -10,9 +10,15 @@ class GameOfLife {
     this.lastTime = 0;
     this.animationId = null;
     this.fpsCounter = new FPSCounter();
-    this.selectedPattern = null;
+    this.selectedPattern = PatternManager.get('single');
     this.isDragging = false;
     this.lastMousePos = { x: 0, y: 0 };
+    this.patternPreview = {
+      active: false,
+      row: 0,
+      col: 0,
+      pattern: null
+    };
 
     this.setupCanvas();
     this.setupEventListeners();
@@ -23,7 +29,8 @@ class GameOfLife {
 
   setupCanvas() {
     this.updateCanvasSize();
-    this.canvas.style.cursor = 'crosshair';
+    this.canvas.style.cursor = 'none';
+    this.canvas.classList.add('pattern-mode');
   }
 
   updateCanvasSize() {
@@ -45,7 +52,18 @@ class GameOfLife {
     this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
     this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
     this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
-    this.canvas.addEventListener('mouseleave', this.handleMouseUp.bind(this));
+    this.canvas.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
+    this.canvas.addEventListener('mouseenter', this.handleMouseEnter.bind(this));
+
+    const canvasContainer = document.querySelector('.canvas-container');
+    canvasContainer.addEventListener('click', this.handleContainerClick.bind(this));
+    canvasContainer.addEventListener('mousemove', this.handleContainerMouseMove.bind(this));
+    canvasContainer.addEventListener('mouseleave', () => {
+      if (this.patternPreview.active) {
+        this.patternPreview.active = false;
+        this.render();
+      }
+    });
 
     window.addEventListener('resize', debounce(() => {
       this.updateCanvasSize();
@@ -57,7 +75,7 @@ class GameOfLife {
     const playBtn = document.getElementById('playBtn');
     const pauseBtn = document.getElementById('pauseBtn');
     const stepBtn = document.getElementById('stepBtn');
-    const resetBtn = document.getElementById('resetBtn');
+    const randomBtn = document.getElementById('randomBtn');
     const clearBtn = document.getElementById('clearBtn');
     const speedSlider = document.getElementById('speedSlider');
     const speedValue = document.getElementById('speedValue');
@@ -67,7 +85,7 @@ class GameOfLife {
     playBtn.addEventListener('click', () => this.play());
     pauseBtn.addEventListener('click', () => this.pause());
     stepBtn.addEventListener('click', () => this.step());
-    resetBtn.addEventListener('click', () => this.reset());
+    randomBtn.addEventListener('click', () => this.random());
     clearBtn.addEventListener('click', () => this.clear());
 
     speedSlider.addEventListener('input', (e) => {
@@ -83,16 +101,30 @@ class GameOfLife {
     patternSelect.addEventListener('change', (e) => {
       const patternName = e.target.value;
       this.selectedPattern = patternName ? PatternManager.get(patternName) : null;
-      this.canvas.style.cursor = this.selectedPattern ? 'copy' : 'crosshair';
+      this.canvas.style.cursor = this.selectedPattern ? 'none' : 'crosshair';
+
+      if (this.selectedPattern) {
+        this.canvas.classList.add('pattern-mode');
+      } else {
+        this.canvas.classList.remove('pattern-mode');
+        this.patternPreview.active = false;
+        this.render();
+      }
     });
   }
 
   handleCanvasClick(e) {
+    if (this.isRunning) {
+      this.pause();
+    }
+
     const pos = getMousePos(this.canvas, e);
     const col = Math.floor(pos.x / this.cellSize);
     const row = Math.floor(pos.y / this.cellSize);
 
-    if (this.selectedPattern) {
+    if (this.selectedPattern && this.selectedPattern.name === "Single Cell") {
+      this.grid.toggleCell(row, col);
+    } else if (this.selectedPattern) {
       this.placePattern(row, col);
     } else {
       this.grid.toggleCell(row, col);
@@ -103,7 +135,11 @@ class GameOfLife {
   }
 
   handleMouseDown(e) {
-    if (this.selectedPattern) return;
+    if (this.selectedPattern && this.selectedPattern.name !== "Single Cell") return;
+
+    if (this.isRunning) {
+      this.pause();
+    }
 
     this.isDragging = true;
     const pos = getMousePos(this.canvas, e);
@@ -111,8 +147,13 @@ class GameOfLife {
 
     const col = Math.floor(pos.x / this.cellSize);
     const row = Math.floor(pos.y / this.cellSize);
-    const currentCell = this.grid.getCell(row, col);
-    this.dragValue = currentCell ? 0 : 1;
+
+    if (this.selectedPattern && this.selectedPattern.name === "Single Cell") {
+      this.dragValue = 1;
+    } else {
+      const currentCell = this.grid.getCell(row, col);
+      this.dragValue = currentCell ? 0 : 1;
+    }
 
     this.grid.setCell(row, col, this.dragValue);
     this.render();
@@ -120,29 +161,86 @@ class GameOfLife {
   }
 
   handleMouseMove(e) {
-    if (!this.isDragging || this.selectedPattern) return;
-
     const pos = getMousePos(this.canvas, e);
-    const col = Math.floor(pos.x / this.cellSize);
-    const row = Math.floor(pos.y / this.cellSize);
+    let col = Math.floor(pos.x / this.cellSize);
+    let row = Math.floor(pos.y / this.cellSize);
 
-    this.grid.setCell(row, col, this.dragValue);
-    this.render();
-    this.updateUI();
+    if (this.selectedPattern && this.selectedPattern.name !== "Single Cell") {
+      this.patternPreview.active = true;
+      this.patternPreview.row = row;
+      this.patternPreview.col = col;
+      this.patternPreview.pattern = this.selectedPattern;
+      this.render();
+    } else if (this.selectedPattern && this.selectedPattern.name === "Single Cell") {
+      if (this.isDragging) {
+        if (pos.x >= 0 && pos.x < this.canvas.width && pos.y >= 0 && pos.y < this.canvas.height) {
+          col = Math.max(0, Math.min(col, this.grid.width - 1));
+          row = Math.max(0, Math.min(row, this.grid.height - 1));
+          this.grid.setCell(row, col, this.dragValue);
+          this.render();
+          this.updateUI();
+        }
+      } else {
+        this.patternPreview.active = true;
+        this.patternPreview.row = row;
+        this.patternPreview.col = col;
+        this.patternPreview.pattern = this.selectedPattern;
+        this.render();
+      }
+    } else if (!this.isDragging) {
+      if (this.patternPreview.active) {
+        this.patternPreview.active = false;
+        this.render();
+      }
+    } else {
+      if (pos.x >= 0 && pos.x < this.canvas.width && pos.y >= 0 && pos.y < this.canvas.height) {
+        col = Math.max(0, Math.min(col, this.grid.width - 1));
+        row = Math.max(0, Math.min(row, this.grid.height - 1));
+        this.grid.setCell(row, col, this.dragValue);
+        this.render();
+        this.updateUI();
+      }
+    }
   }
 
   handleMouseUp() {
     this.isDragging = false;
   }
 
-  placePattern(row, col) {
+  handleMouseEnter() {
+    if (this.selectedPattern) {
+      this.patternPreview.active = true;
+      this.render();
+    }
+  }
+
+  handleMouseLeave() {
+    this.isDragging = false;
+  } placePattern(row, col) {
     if (!this.selectedPattern) return;
 
     const patternSize = PatternManager.getSize(this.selectedPattern);
-    const startRow = Math.max(0, row - Math.floor(patternSize.height / 2));
-    const startCol = Math.max(0, col - Math.floor(patternSize.width / 2));
+    const startRow = row - Math.floor(patternSize.height / 2);
+    const startCol = col - Math.floor(patternSize.width / 2);
 
-    this.grid.cells = PatternManager.place(this.grid.cells, this.selectedPattern, startRow, startCol);
+    if (this.selectedPattern.pattern === "random") {
+      this.grid.fillRandom(0.3);
+      return;
+    }
+
+    for (let pRow = 0; pRow < this.selectedPattern.pattern.length; pRow++) {
+      for (let pCol = 0; pCol < this.selectedPattern.pattern[pRow].length; pCol++) {
+        if (this.selectedPattern.pattern[pRow][pCol]) {
+          let gridRow = startRow + pRow;
+          let gridCol = startCol + pCol;
+
+          gridRow = ((gridRow % this.grid.height) + this.grid.height) % this.grid.height;
+          gridCol = ((gridCol % this.grid.width) + this.grid.width) % this.grid.width;
+
+          this.grid.setCell(gridRow, gridCol, 1);
+        }
+      }
+    }
   }
 
   play() {
@@ -152,6 +250,7 @@ class GameOfLife {
     document.getElementById('playBtn').disabled = true;
     document.getElementById('pauseBtn').disabled = false;
 
+    this.lastTime = performance.now();
     this.gameLoop();
   }
 
@@ -162,16 +261,25 @@ class GameOfLife {
 
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
+      this.animationId = null;
     }
+
+    this.render();
   }
 
   step() {
-    this.nextGeneration();
+    this.grid.nextGeneration();
+    this.generation++;
+
+    if (this.grid.isEmpty()) {
+      this.pause();
+    }
+
     this.render();
     this.updateUI();
   }
 
-  reset() {
+  random() {
     this.pause();
     this.grid.fillRandom(0.3);
     this.generation = 0;
@@ -196,6 +304,10 @@ class GameOfLife {
   }
 
   nextGeneration() {
+    if (!this.isRunning) {
+      return;
+    }
+
     this.grid.nextGeneration();
     this.generation++;
 
@@ -205,7 +317,10 @@ class GameOfLife {
   }
 
   gameLoop() {
-    if (!this.isRunning) return;
+    if (!this.isRunning) {
+      this.animationId = null;
+      return;
+    }
 
     const currentTime = performance.now();
     const deltaTime = currentTime - this.lastTime;
@@ -218,7 +333,9 @@ class GameOfLife {
       this.lastTime = currentTime;
     }
 
-    this.animationId = requestAnimationFrame(() => this.gameLoop());
+    if (this.isRunning) {
+      this.animationId = requestAnimationFrame(() => this.gameLoop());
+    }
   }
 
   render() {
@@ -226,9 +343,12 @@ class GameOfLife {
 
     this.drawGrid();
     this.drawCells();
+    this.drawPatternPreview();
 
-    const fps = this.fpsCounter.update();
-    document.getElementById('fpsCount').textContent = fps;
+    if (this.isRunning) {
+      const fps = this.fpsCounter.update();
+      document.getElementById('fpsCount').textContent = fps;
+    }
   }
 
   drawGrid() {
@@ -254,17 +374,74 @@ class GameOfLife {
 
   drawCells() {
     this.ctx.fillStyle = '#2c3e50';
+    let drawnCells = 0;
 
     for (let row = 0; row < this.grid.height; row++) {
       for (let col = 0; col < this.grid.width; col++) {
-        if (this.grid.getCell(row, col)) {
+        const cellValue = this.grid.getCell(row, col);
+        if (cellValue) {
           const x = col * this.cellSize;
           const y = row * this.cellSize;
-
           this.ctx.fillRect(x + 1, y + 1, this.cellSize - 2, this.cellSize - 2);
+          drawnCells++;
         }
       }
     }
+  }
+
+  drawPatternPreview() {
+    if (!this.patternPreview.active || !this.patternPreview.pattern) return;
+
+    const pattern = this.patternPreview.pattern;
+    const patternSize = PatternManager.getSize(pattern);
+    const startRow = this.patternPreview.row - Math.floor(patternSize.height / 2);
+    const startCol = this.patternPreview.col - Math.floor(patternSize.width / 2);
+
+    if (pattern.pattern === "random") return;
+
+    this.ctx.fillStyle = 'rgba(52, 152, 219, 0.4)';
+    this.ctx.strokeStyle = '#3498db';
+    this.ctx.lineWidth = 2;
+
+    for (let row = 0; row < pattern.pattern.length; row++) {
+      for (let col = 0; col < pattern.pattern[row].length; col++) {
+        if (pattern.pattern[row][col]) {
+          let gridRow = startRow + row;
+          let gridCol = startCol + col;
+
+          gridRow = ((gridRow % this.grid.height) + this.grid.height) % this.grid.height;
+          gridCol = ((gridCol % this.grid.width) + this.grid.width) % this.grid.width;
+
+          const x = gridCol * this.cellSize;
+          const y = gridRow * this.cellSize;
+
+          this.ctx.fillRect(x + 1, y + 1, this.cellSize - 2, this.cellSize - 2);
+          this.ctx.strokeRect(x + 1, y + 1, this.cellSize - 2, this.cellSize - 2);
+        }
+      }
+    }
+
+    this.ctx.fillStyle = 'rgba(52, 152, 219, 0.1)';
+    this.ctx.strokeStyle = '#3498db';
+    this.ctx.lineWidth = 1;
+    this.ctx.setLineDash([5, 5]);
+
+    for (let row = 0; row < pattern.pattern.length; row++) {
+      for (let col = 0; col < pattern.pattern[row].length; col++) {
+        let gridRow = startRow + row;
+        let gridCol = startCol + col;
+
+        gridRow = ((gridRow % this.grid.height) + this.grid.height) % this.grid.height;
+        gridCol = ((gridCol % this.grid.width) + this.grid.width) % this.grid.width;
+
+        const x = gridCol * this.cellSize;
+        const y = gridRow * this.cellSize;
+
+        this.ctx.strokeRect(x, y, this.cellSize, this.cellSize);
+      }
+    }
+
+    this.ctx.setLineDash([]);
   }
 
   updateUI() {
@@ -298,6 +475,53 @@ class GameOfLife {
 
     document.getElementById('speedSlider').value = this.speed;
     document.getElementById('speedValue').textContent = this.speed;
+  }
+
+  handleContainerMouseMove(e) {
+    if (!this.selectedPattern) return;
+
+    const canvasRect = this.canvas.getBoundingClientRect();
+    const containerRect = e.currentTarget.getBoundingClientRect();
+
+    const x = e.clientX - canvasRect.left;
+    const y = e.clientY - canvasRect.top;
+
+    let col = Math.floor(x / this.cellSize);
+    let row = Math.floor(y / this.cellSize);
+
+    this.patternPreview.active = true;
+    this.patternPreview.row = row;
+    this.patternPreview.col = col;
+    this.patternPreview.pattern = this.selectedPattern;
+    this.render();
+  }
+
+  handleContainerClick(e) {
+    if (e.target === this.canvas) return;
+
+    if (!this.selectedPattern) return;
+
+    if (this.isRunning) {
+      this.pause();
+    }
+
+    const canvasRect = this.canvas.getBoundingClientRect();
+    const x = e.clientX - canvasRect.left;
+    const y = e.clientY - canvasRect.top;
+
+    const col = Math.floor(x / this.cellSize);
+    const row = Math.floor(y / this.cellSize);
+
+    if (this.selectedPattern.name === "Single Cell") {
+      const wrappedCol = ((col % this.grid.width) + this.grid.width) % this.grid.width;
+      const wrappedRow = ((row % this.grid.height) + this.grid.height) % this.grid.height;
+      this.grid.toggleCell(wrappedRow, wrappedCol);
+    } else {
+      this.placePattern(row, col);
+    }
+
+    this.render();
+    this.updateUI();
   }
 }
 

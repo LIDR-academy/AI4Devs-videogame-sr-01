@@ -17,3 +17,16 @@ implement it using vanilla JavaScript, HTML, and CSS
 
 Start the first implementation phase by setting up the project structure and
 basic functionalities
+
+## Prompt 3: Corrections
+
+Let's correct some of implementation issues
+
+- The still life blocks do not appear on the pattern selector
+- The "reset" button does not reset the grid, instead it fills it with random
+  cells, I think we can remove it from the pattern selector because the button will be better UX
+- When i add a single cell it disappears
+- The UI for adding patterns is not intuitive, it should highlight the cell where the pattern will be placed and show a "shadown" of the pattern that does not affect the grid until the user clicks to confirm placement
+- When game is running, users cannot edit the grid, we should allow users to pause the game before editing
+
+Let's focus on fixing these issues one by one before moving to the next

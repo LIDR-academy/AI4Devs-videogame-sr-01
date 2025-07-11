@@ -21,7 +21,7 @@
               Pause
             </button>
             <button id="stepBtn" class="btn btn-secondary">Step</button>
-            <button id="resetBtn" class="btn btn-danger">Reset</button>
+            <button id="randomBtn" class="btn btn-info">Random</button>
             <button id="clearBtn" class="btn btn-secondary">Clear</button>
           </div>
 
@@ -44,13 +44,27 @@
           <div class="control-group">
             <label for="patternSelect">Patterns:</label>
             <select id="patternSelect">
-              <option value="">Select a pattern</option>
-              <option value="glider">Glider</option>
-              <option value="blinker">Blinker</option>
-              <option value="toad">Toad</option>
-              <option value="beacon">Beacon</option>
-              <option value="pulsar">Pulsar</option>
-              <option value="gosperGun">Gosper Glider Gun</option>
+              <option value="single">Single Cell</option>
+              <optgroup label="Spaceships">
+                <option value="glider">Glider</option>
+                <option value="lightweight">Lightweight Spaceship</option>
+              </optgroup>
+              <optgroup label="Oscillators">
+                <option value="blinker">Blinker</option>
+                <option value="toad">Toad</option>
+                <option value="beacon">Beacon</option>
+                <option value="pulsar">Pulsar</option>
+                <option value="pentadecathlon">Pentadecathlon</option>
+              </optgroup>
+              <optgroup label="Still Lifes">
+                <option value="block">Block</option>
+                <option value="beehive">Beehive</option>
+                <option value="loaf">Loaf</option>
+                <option value="boat">Boat</option>
+              </optgroup>
+              <optgroup label="Guns">
+                <option value="gosperGun">Gosper Glider Gun</option>
+              </optgroup>
             </select>
           </div>
         </div>
@@ -79,15 +93,19 @@
         <div class="instructions">
           <h3>How to Play:</h3>
           <ul>
-            <li><strong>Click</strong> on cells to toggle them alive/dead</li>
+            <!-- <li><strong>Click</strong> on cells to toggle them alive/dead</li> -->
             <li><strong>Drag</strong> to paint multiple cells</li>
             <li>
-              <strong>Select patterns</strong> from the dropdown and click to
-              place them
+              <strong>Select patterns</strong> from the dropdown - you'll see a
+              blue preview shadow that shows where the pattern will be placed
             </li>
             <li>
-              <strong>Use controls</strong> to play, pause, step, or reset the
-              simulation
+              <strong>Click to place pattern</strong> when you see the preview
+              in the desired location
+            </li>
+            <li>
+              <strong>Use controls</strong> to play, pause, step, or generate
+              random patterns
             </li>
           </ul>
 
@@ -96,6 +114,15 @@
             <li>Live cell with 2-3 neighbors survives</li>
             <li>Dead cell with exactly 3 neighbors becomes alive</li>
             <li>All other cells die or remain dead</li>
+            <li>
+              <strong>Note:</strong> Single isolated cells will die when the
+              game advances to the next generation (they need neighbors to
+              survive)
+            </li>
+            <li>
+              <strong>Tip:</strong> The game automatically pauses when you edit
+              the grid, so your changes won't disappear until you press Play
+            </li>
           </ul>
         </div>
       </main>

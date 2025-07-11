@@ -105,6 +105,15 @@ main {
   background: #5a6268;
 }
 
+.btn-info {
+  background: #17a2b8;
+  color: white;
+}
+
+.btn-info:hover:not(:disabled) {
+  background: #138496;
+}
+
 .btn-danger {
   background: #dc3545;
   color: white;
@@ -130,6 +139,17 @@ select {
   border-radius: 4px;
   background: white;
   font-size: 14px;
+}
+
+select optgroup {
+  font-weight: 600;
+  color: #495057;
+  background: #f8f9fa;
+  padding: 4px;
+}
+
+select option {
+  padding: 4px 8px;
 }
 
 .game-area {
@@ -167,6 +187,7 @@ select {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  padding: 40px;
 }
 
 #gameCanvas {
@@ -175,6 +196,17 @@ select {
   background: white;
   cursor: crosshair;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+#gameCanvas:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+#gameCanvas.pattern-mode {
+  cursor: none;
+  border-color: #3498db;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
 }
 
 .instructions {
