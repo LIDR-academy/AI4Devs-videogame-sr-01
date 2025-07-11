@@ -30,3 +30,7 @@ Let's correct some of implementation issues
 - When game is running, users cannot edit the grid, we should allow users to pause the game before editing
 
 Let's focus on fixing these issues one by one before moving to the next
+
+## Prompt 4: Add generation controls
+
+I want to be able to "go" a specific generation, by setting a number on a slider I should go tot that generation, the slider should have a maximum value of the current generation

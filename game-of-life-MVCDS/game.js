@@ -5,6 +5,8 @@ class GameOfLife {
     this.grid = new Grid(50, 50);
     this.isRunning = false;
     this.generation = 0;
+    this.generationHistory = [];
+    this.maxHistorySize = 1000;
     this.speed = 5;
     this.cellSize = 10;
     this.lastTime = 0;
@@ -23,6 +25,8 @@ class GameOfLife {
     this.setupCanvas();
     this.setupEventListeners();
     this.setupControls();
+    this.saveCurrentState();
+    this.updateGenerationSlider();
     this.render();
     this.updateUI();
   }
@@ -79,6 +83,8 @@ class GameOfLife {
     const clearBtn = document.getElementById('clearBtn');
     const speedSlider = document.getElementById('speedSlider');
     const speedValue = document.getElementById('speedValue');
+    const generationSlider = document.getElementById('generationSlider');
+    const generationSliderValue = document.getElementById('generationSliderValue');
     const gridSizeSelect = document.getElementById('gridSize');
     const patternSelect = document.getElementById('patternSelect');
 
@@ -91,6 +97,12 @@ class GameOfLife {
     speedSlider.addEventListener('input', (e) => {
       this.speed = parseInt(e.target.value);
       speedValue.textContent = this.speed;
+    });
+
+    generationSlider.addEventListener('input', (e) => {
+      const targetGeneration = parseInt(e.target.value);
+      generationSliderValue.textContent = targetGeneration;
+      this.goToGeneration(targetGeneration);
     });
 
     gridSizeSelect.addEventListener('change', (e) => {
@@ -268,6 +280,7 @@ class GameOfLife {
   }
 
   step() {
+    this.saveCurrentState();
     this.grid.nextGeneration();
     this.generation++;
 
@@ -275,6 +288,7 @@ class GameOfLife {
       this.pause();
     }
 
+    this.updateGenerationSlider();
     this.render();
     this.updateUI();
   }
@@ -283,6 +297,9 @@ class GameOfLife {
     this.pause();
     this.grid.fillRandom(0.3);
     this.generation = 0;
+    this.generationHistory = [];
+    this.saveCurrentState();
+    this.updateGenerationSlider();
     this.render();
     this.updateUI();
   }
@@ -291,6 +308,9 @@ class GameOfLife {
     this.pause();
     this.grid.clear();
     this.generation = 0;
+    this.generationHistory = [];
+    this.saveCurrentState();
+    this.updateGenerationSlider();
     this.render();
     this.updateUI();
   }
@@ -298,7 +318,11 @@ class GameOfLife {
   resizeGrid(width, height) {
     this.pause();
     this.grid.resize(width, height);
+    this.generation = 0;
+    this.generationHistory = [];
+    this.saveCurrentState();
     this.updateCanvasSize();
+    this.updateGenerationSlider();
     this.render();
     this.updateUI();
   }
@@ -308,12 +332,15 @@ class GameOfLife {
       return;
     }
 
+    this.saveCurrentState();
     this.grid.nextGeneration();
     this.generation++;
 
     if (this.grid.isEmpty()) {
       this.pause();
     }
+
+    this.updateGenerationSlider();
   }
 
   gameLoop() {
@@ -464,12 +491,15 @@ class GameOfLife {
     this.grid.fromArray(state.cells);
     this.generation = state.generation || 0;
     this.speed = state.speed || 5;
+    this.generationHistory = [];
+    this.saveCurrentState();
 
     if (state.gridSize) {
       this.grid.resize(state.gridSize.width, state.gridSize.height);
     }
 
     this.updateCanvasSize();
+    this.updateGenerationSlider();
     this.render();
     this.updateUI();
 
@@ -522,6 +552,62 @@ class GameOfLife {
 
     this.render();
     this.updateUI();
+  }
+
+  saveCurrentState() {
+    const state = {
+      cells: this.grid.toArray(),
+      generation: this.generation,
+      population: this.grid.getPopulation()
+    };
+
+    this.generationHistory[this.generation] = state;
+
+    if (this.generationHistory.length > this.maxHistorySize) {
+      this.generationHistory.shift();
+    }
+  }
+
+  goToGeneration(targetGeneration) {
+    if (targetGeneration < 0 || targetGeneration > this.generationHistory.length - 1) {
+      return;
+    }
+
+    if (targetGeneration === this.generation) {
+      return;
+    }
+
+    this.pause();
+
+    if (targetGeneration < this.generation && this.generationHistory[targetGeneration]) {
+      const state = this.generationHistory[targetGeneration];
+      this.grid.fromArray(state.cells);
+      this.generation = targetGeneration;
+    } else if (targetGeneration > this.generation) {
+      const generationsToCompute = targetGeneration - this.generation;
+      for (let i = 0; i < generationsToCompute; i++) {
+        this.saveCurrentState();
+        this.grid.nextGeneration();
+        this.generation++;
+
+        if (this.grid.isEmpty()) {
+          break;
+        }
+      }
+    }
+
+    this.updateGenerationSlider();
+    this.render();
+    this.updateUI();
+  }
+
+  updateGenerationSlider() {
+    const slider = document.getElementById('generationSlider');
+    const value = document.getElementById('generationSliderValue');
+
+    slider.max = Math.max(this.generation, this.generationHistory.length - 1);
+    slider.value = this.generation;
+    value.textContent = this.generation;
   }
 }
 
