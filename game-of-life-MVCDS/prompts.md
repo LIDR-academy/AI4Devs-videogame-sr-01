@@ -1,6 +1,7 @@
 # Conway's Game of Life
 
-Developed with Claude Sonnet 4 under copilot (with my generation configurations)
+Developed with Claude Sonnet 4 under VS's copilot with my generation
+configurations under my user's setting
 
 ## Prompt 1: Planning
 
@@ -11,3 +12,8 @@ game of life
 
 Context: we will focus first on design how the game will work, then we will
 implement it using vanilla JavaScript, HTML, and CSS
+
+## Pompt 2: Create basic game
+
+Start the first implementation phase by setting up the project structure and
+basic functionalities

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conway's Game of Life</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Conway's Game of Life</h1>
+        <p>A cellular automaton devised by mathematician John Conway</p>
+      </header>
+
+      <main>
+        <div class="controls">
+          <div class="control-group">
+            <button id="playBtn" class="btn btn-primary">Play</button>
+            <button id="pauseBtn" class="btn btn-secondary" disabled>
+              Pause
+            </button>
+            <button id="stepBtn" class="btn btn-secondary">Step</button>
+            <button id="resetBtn" class="btn btn-danger">Reset</button>
+            <button id="clearBtn" class="btn btn-secondary">Clear</button>
+          </div>
+
+          <div class="control-group">
+            <label for="speedSlider">Speed:</label>
+            <input type="range" id="speedSlider" min="1" max="10" value="5" />
+            <span id="speedValue">5</span> gen/s
+          </div>
+
+          <div class="control-group">
+            <label for="gridSize">Grid Size:</label>
+            <select id="gridSize">
+              <option value="30">30x30</option>
+              <option value="50" selected>50x50</option>
+              <option value="70">70x70</option>
+              <option value="100">100x100</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="patternSelect">Patterns:</label>
+            <select id="patternSelect">
+              <option value="">Select a pattern</option>
+              <option value="glider">Glider</option>
+              <option value="blinker">Blinker</option>
+              <option value="toad">Toad</option>
+              <option value="beacon">Beacon</option>
+              <option value="pulsar">Pulsar</option>
+              <option value="gosperGun">Gosper Glider Gun</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="game-area">
+          <div class="stats">
+            <div class="stat-item">
+              <span class="stat-label">Generation:</span>
+              <span id="generationCount">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Population:</span>
+              <span id="populationCount">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">FPS:</span>
+              <span id="fpsCount">0</span>
+            </div>
+          </div>
+
+          <div class="canvas-container">
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+          </div>
+        </div>
+
+        <div class="instructions">
+          <h3>How to Play:</h3>
+          <ul>
+            <li><strong>Click</strong> on cells to toggle them alive/dead</li>
+            <li><strong>Drag</strong> to paint multiple cells</li>
+            <li>
+              <strong>Select patterns</strong> from the dropdown and click to
+              place them
+            </li>
+            <li>
+              <strong>Use controls</strong> to play, pause, step, or reset the
+              simulation
+            </li>
+          </ul>
+
+          <h3>Rules:</h3>
+          <ul>
+            <li>Live cell with 2-3 neighbors survives</li>
+            <li>Dead cell with exactly 3 neighbors becomes alive</li>
+            <li>All other cells die or remain dead</li>
+          </ul>
+        </div>
+      </main>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="patterns.js"></script>
+    <script src="grid.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>
